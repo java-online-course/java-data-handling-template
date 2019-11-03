@@ -6,11 +6,11 @@ import java.math.BigInteger;
 public interface BigNumbersService {
 
     /**
-     * Метод считает число π с точностью до знака
-     * @param range знак
-     * @return число π
+     * Метод делит первое число на второе с заданной точностью
+     * @param range точность
+     * @return результат
      */
-    BigDecimal getPiWithScale(int range);
+    BigDecimal getPiWithScale(int a, int b, int range);
 
     /**
      * Метод находит простое число
