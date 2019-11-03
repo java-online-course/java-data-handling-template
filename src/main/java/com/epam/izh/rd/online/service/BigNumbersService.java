@@ -10,7 +10,7 @@ public interface BigNumbersService {
      * @param range точность
      * @return результат
      */
-    BigDecimal getPiWithScale(int a, int b, int range);
+    BigDecimal getPercisionNumber(int a, int b, int range);
 
     /**
      * Метод находит простое число
