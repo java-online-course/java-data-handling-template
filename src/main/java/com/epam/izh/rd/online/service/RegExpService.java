@@ -11,8 +11,8 @@ public interface RegExpService {
     String maskSensitiveData();
 
     /**
-     * Метод должен считыввать файл sensitive_data.txt и заменять плейсхолдер ${amount} на случайное число. Метод должен
-     * создержать регулярное выражение для поиска плейсхолдера
+     * Метод должен считыввать файл sensitive_data.txt и заменять плейсхолдер ${payment_amount} и ${balance} на случайные числа. Метод должен
+     * содержать регулярное выражение для поиска плейсхолдеров
      * @return обработанный текст
      */
     String replacePlaceholders();
