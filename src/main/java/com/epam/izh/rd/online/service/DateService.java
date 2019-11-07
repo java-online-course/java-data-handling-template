@@ -35,13 +35,7 @@ public interface DateService {
     long getNextLeapYear();
 
     /**
-     * Метод возвращает ваш возраст в часах
-     * @return возраст
-     */
-    long getYourAgeInHours();
-
-    /**
-     * Метод считает число секунд в следующем месяце
+     * Метод считает число секунд в 2020 году
      * @return
      */
     long getSecondsInNextMonth();

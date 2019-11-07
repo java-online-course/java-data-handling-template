@@ -5,17 +5,7 @@ import java.math.BigInteger;
 
 public interface BigNumbersService {
 
-    /**
-     * Метод делит первое число на второе с заданной точностью
-     * @param range точность
-     * @return результат
-     */
-    BigDecimal getPercisionNumber(int a, int b, int range);
+    BigDecimal getPrecisionNumber(int a, int b, int range);
 
-    /**
-     * Метод находит простое число
-     * @param range номер числа, считая с числа 1
-     * @return простое число
-     */
-    BigInteger getPrimaryNumber(int range);
+    BigInteger getPrimaryNumber(int count);
 }
