@@ -4,5 +4,5 @@ public interface RegExpService {
 
     String maskSensitiveData();
 
-    String replacePlaceholders(double amount1, double amount2);
+    String replacePlaceholders(double paymentAmount, double balance);
 }

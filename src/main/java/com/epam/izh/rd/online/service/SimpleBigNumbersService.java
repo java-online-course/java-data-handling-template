@@ -7,7 +7,7 @@ public class SimpleBigNumbersService implements BigNumbersService {
 
     /**
      * Метод делит первое число на второе с заданной точностью
-     *
+     * Например 1/3 с точностью 2 = 0.33
      * @param range точность
      * @return результат
      */
@@ -17,7 +17,7 @@ public class SimpleBigNumbersService implements BigNumbersService {
     }
 
     /**
-     * Метод находит простое число
+     * Метод находит простое число по номеру
      *
      * @param range номер числа, считая с числа 2
      * @return простое число

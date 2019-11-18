@@ -23,12 +23,14 @@ public class BigNumbersServiceTest {
     @Test
     @DisplayName("Тест метода BigNumbersService.getPrecisionNumber(int a, int b, int range)")
     void testGetPrecisionNumber() {
-        assertEquals(BigDecimal.valueOf(0.33), bigNumbersService.getPrecisionNumber(1, 3, 2));
+        assertEquals(BigDecimal.valueOf(0.33), bigNumbersService.getPrecisionNumber(1, 3, 2),
+                "Для вызова метода: bigNumbersService.getPrecisionNumber(1, 3, 2)");
     }
 
     @Test
     @DisplayName("Тест метода BigNumbersService.getPrimaryNumber(int range)")
     void testGetPrimaryNumber() {
-        assertEquals(BigInteger.valueOf(1223), bigNumbersService.getPrimaryNumber(100));
+        assertEquals(BigInteger.valueOf(1223), bigNumbersService.getPrimaryNumber(100),
+                "Для вызова метода: bigNumbersService.getPrimaryNumber(100)");
     }
 }

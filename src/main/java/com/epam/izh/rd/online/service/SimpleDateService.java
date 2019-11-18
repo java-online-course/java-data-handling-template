@@ -20,7 +20,7 @@ public class SimpleDateService implements DateService {
     /**
      * Метод парсит строку в дату
      *
-     * @param string строка в формате год-месяц-день час:минута (1970-01-01 00:00)
+     * @param string строка в формате год-месяц-день часы:минуты (1970-01-01 00:00)
      * @return дата и время
      */
     @Override
@@ -31,7 +31,7 @@ public class SimpleDateService implements DateService {
     /**
      * Метод конвертирует дату в строку с заданным форматом
      *
-     * @param localDate    исходная дата
+     * @param localDate исходная дата
      * @param formatter формат даты
      * @return полученная строка
      */

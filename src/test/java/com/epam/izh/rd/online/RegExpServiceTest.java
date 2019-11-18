@@ -1,7 +1,7 @@
 package com.epam.izh.rd.online;
 
 import com.epam.izh.rd.online.service.RegExpService;
-import com.epam.izh.rd.online.service.RegExpServiceImpl;
+import com.epam.izh.rd.online.service.SimpleRegExpService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,7 @@ public class RegExpServiceTest {
 
     @BeforeAll
     static void setup() {
-        regExpService = new RegExpServiceImpl();
+        regExpService = new SimpleRegExpService();
     }
 
     @Test
