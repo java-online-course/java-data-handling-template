@@ -30,7 +30,7 @@ public class BigNumbersServiceTest {
     @Test
     @DisplayName("Тест метода BigNumbersService.getPrimaryNumber(int range)")
     void testGetPrimaryNumber() {
-        assertEquals(BigInteger.valueOf(1223), bigNumbersService.getPrimaryNumber(100),
+        assertEquals(BigInteger.valueOf(547), bigNumbersService.getPrimaryNumber(100),
                 "Для вызова метода: bigNumbersService.getPrimaryNumber(100)");
     }
 }

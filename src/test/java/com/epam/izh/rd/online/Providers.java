@@ -14,7 +14,7 @@ public class Providers {
 
     public static Stream<Arguments> testRemoveStringProvider() {
         return Stream.of(
-                arguments("Hello, hello, hello, how low?", ", he", "Hellollollo, how low"),
+                arguments("Hello, hello, hello, how low?", ", he", "Hellollollo, how low?"),
                 arguments("Ahahahahaha", "ha", "A"),
                 arguments("London is the capital of Great Britain", "Russia", "London is the capital of Great Britain")
         );
