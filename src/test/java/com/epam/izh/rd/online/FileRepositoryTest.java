@@ -37,7 +37,7 @@ public class FileRepositoryTest {
     @Test
     @DisplayName("Тест метода FileRepository.countDirsInDirectory(String path)")
     void testCountDirsInDirectory() {
-        assertEquals(9, fileRepository.countDirsInDirectory(TEST_DIR_COUNT_PATH));
+        assertEquals(7, fileRepository.countDirsInDirectory(TEST_DIR_COUNT_PATH));
     }
 
     @Test
