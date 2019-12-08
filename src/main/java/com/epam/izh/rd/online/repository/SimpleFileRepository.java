@@ -1,5 +1,9 @@
 package com.epam.izh.rd.online.repository;
 
+import java.io.*;
+import java.net.URL;
+
+
 public class SimpleFileRepository implements FileRepository {
 
     /**
@@ -8,9 +12,21 @@ public class SimpleFileRepository implements FileRepository {
      * @param path путь до директори
      * @return файлов, в том числе скрытых
      */
+
     @Override
     public long countFilesInDirectory(String path) {
-        return 0;
+        File dir = new File("src/main/resources/"+path);
+        long count = 0;
+        if(dir.isDirectory()){
+            for (File file :dir.listFiles()) {
+               count+=countFilesInDirectory(path+"/"+file.getName());
+            }
+
+        }else{
+            count++;
+        }
+
+        return count;
     }
 
     /**
@@ -21,7 +37,17 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public long countDirsInDirectory(String path) {
-        return 0;
+        File dir = new File("src/main/resources/"+path);
+        long count = 0;
+        if(dir.isDirectory()){
+            count++;
+            for (File file :dir.listFiles()) {
+                count+=countDirsInDirectory(path+"/"+file.getName());
+            }
+
+        }
+
+        return count;
     }
 
     /**
@@ -32,6 +58,24 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public void copyTXTFiles(String from, String to) {
+        File dir = new File(from);
+        for (File file:dir.listFiles()) {
+            if(file.getName().endsWith(".txt")){
+                try(BufferedReader bufferedReader= new BufferedReader(new FileReader(new File(from)));
+                    BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(new File(to)))) {
+                    String line = null;
+                    while((line=bufferedReader.readLine())!=null){
+                        bufferedWriter.write(line,0,line.length());
+                        bufferedWriter.newLine();
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
         return;
     }
 
@@ -44,7 +88,18 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public boolean createFile(String path, String name) {
+        ClassLoader classLoader = getClass().getClassLoader();
+        URL resource = classLoader.getResource(path);
+        File file = new File(resource.getPath());
+
+        try {
+            FileWriter fileWriter = new FileWriter(file.getPath()+"/"+name);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return false;
+
     }
 
     /**
@@ -55,6 +110,21 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public String readFileFromResources(String fileName) {
-        return null;
+        File file = new File("src/main/resources/"+fileName);
+        String result="";
+        try(BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
+            String line = null;
+
+            while ((line=bufferedReader.readLine())!=null){
+                result+=line;
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
+
 }
