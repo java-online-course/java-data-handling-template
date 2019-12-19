@@ -4,11 +4,11 @@ public class SimpleTextService implements TextService {
 
     /**
      * Реализовать функционал удаления строки из другой строки.
-     *
+     * <p>
      * Например для базовой строки "Hello, hello, hello, how low?" и строки для удаления ", he"
      * метод вернет "Hellollollo, how low?"
      *
-     * @param base - базовая строка с текстом
+     * @param base   - базовая строка с текстом
      * @param remove - строка которую необходимо удалить
      */
     @Override
@@ -16,32 +16,27 @@ public class SimpleTextService implements TextService {
         return null; //TODO
     }
 
-    /**
-     * Реализовать функционал проверки на то, что строка заканчивается знаком вопроса.
-     *
-     * Например для строки "Hello, hello, hello, how low?" метод вернет true
-     * Например для строки "Hello, hello, hello!" метод вернет false
-     */
     @Override
     public boolean isQuestionString(String text) {
-        return false; //TODO
+        String lastSymbol = String.valueOf(text.charAt(text.length() - 1));
+        return lastSymbol.contains("?");
     }
 
-    /**
-     * Реализовать функционал соединения переданных строк.
-     *
-     * Например для параметров {"Smells", " ", "Like", " ", "Teen", " ", "Spirit"}
-     * метод вернет "Smells Like Teen Spirit"
-     */
     @Override
     public String concatenate(String... elements) {
-        return null; //TODO
+        String resultString = "";
+        StringBuilder stringBuilder = new StringBuilder(resultString);
+        for (String strings : elements) {
+            stringBuilder.append(strings);
+        }
+        resultString = stringBuilder.toString();
+        return resultString;
     }
 
     /**
      * Реализовать функционал изменения регистра в вид лесенки.
      * Возвращаемый текст должен начинаться с прописного регистра.
-     *
+     * <p>
      * Например для строки "Load Up On Guns And Bring Your Friends"
      * метод вернет "lOaD Up oN GuNs aNd bRiNg yOuR FrIeNdS".
      */
@@ -52,13 +47,13 @@ public class SimpleTextService implements TextService {
 
     /**
      * Метод определяет, является ли строка палиндромом.
-     *
+     * <p>
      * Палиндром - строка, которая одинаково читается слева направо и справа налево.
-     *
+     * <p>
      * Например для строки "а роза упала на лапу Азора" вернется true, а для "я не палиндром" false
      */
     @Override
     public boolean isPalindrome(String string) {
-       return false; //TODO
+        return false; //TODO
     }
 }
