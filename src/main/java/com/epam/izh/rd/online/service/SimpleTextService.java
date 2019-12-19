@@ -1,6 +1,7 @@
 package com.epam.izh.rd.online.service;
 
 public class SimpleTextService implements TextService {
+    //TODO удалить все sout
 
     /**
      * Реализовать функционал удаления строки из другой строки.
@@ -24,13 +25,11 @@ public class SimpleTextService implements TextService {
 
     @Override
     public String concatenate(String... elements) {
-        String resultString = "";
-        StringBuilder stringBuilder = new StringBuilder(resultString);
+        StringBuilder builder = new StringBuilder();
         for (String strings : elements) {
-            stringBuilder.append(strings);
+            builder.append(strings);
         }
-        resultString = stringBuilder.toString();
-        return resultString;
+        return builder.toString();
     }
 
     /**
@@ -45,15 +44,24 @@ public class SimpleTextService implements TextService {
         return null; //TODO
     }
 
-    /**
-     * Метод определяет, является ли строка палиндромом.
-     * <p>
-     * Палиндром - строка, которая одинаково читается слева направо и справа налево.
-     * <p>
-     * Например для строки "а роза упала на лапу Азора" вернется true, а для "я не палиндром" false
-     */
     @Override
     public boolean isPalindrome(String string) {
-        return false; //TODO
+        if (string == null) {
+            return false;//Хотя может нада true??
+        }
+        if (string.equals("")) {
+            return false;//Хотя может нада true??
+        }
+        string = string.replaceAll("[^A-Za-zА-Яа-я]", "");
+        //Удаляем все кроме букв, работает только с русскими и английскими языками, или я не прав?
+        System.out.println("1 " + string);
+        StringBuilder builder = new StringBuilder();
+        for (int i = string.length() - 1; i >= 0; i--) {
+            String symbol = String.valueOf(string.charAt(i));
+            builder.append(symbol);
+        }
+        System.out.println("2 " + builder.toString());
+        //Специально игнорирую Case, т.к. иначе ароза != Ароза, хотя можно было сначала убрать Case из строки, но решил так
+        return string.equalsIgnoreCase(builder.toString());
     }
 }
