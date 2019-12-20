@@ -20,24 +20,24 @@ public class SimpleDateService implements DateService {
         return localDate.format(formatter);
     }
 
-    /**
-     * Метод получает следующий високосный год
-     *
-     * @return високосный год
-     */
     @Override
     public long getNextLeapYear() {
-        return 0;
+        //Неясно следующий високосный год от чего (от какой даты)??
+        //Либо метод должен принимать int year, либо LocalDate.now(), судя по проверке, на 2020 год, это все таки LocalDate.now()
+        //Делаю LocalDate.now()
+        int year = LocalDate.now().getYear(); //Узнаем текущий год
+        do {
+            year++;
+        } //Если год делиться на 366 без остатка, он високосный
+        while (LocalDateTime.of(year, 12, 31, 0, 0).getDayOfYear() % 366 != 0);
+
+        return year;
     }
 
-    /**
-     * Метод считает число секунд в заданном году
-     *
-     * @return число секунд
-     */
     @Override
     public long getSecondsInYear(int year) {
-        return 0;
+        //Узнаем сколько дней в году year, используя getDayOfYear и умножаем на 24 часа, 60 минут, 60 секунд
+        return LocalDateTime.of(year, 12, 31, 0, 0).getDayOfYear() * 24 * 60 * 60;
     }
 
 
