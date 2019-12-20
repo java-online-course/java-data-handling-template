@@ -14,7 +14,10 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String removeString(String base, String remove) {
-        return null; //TODO
+        //А удалять все вхождения или первое?? не написано! Case учитывать??
+        //Хотя может это сделано, что бы проверить мою внимательность и догадливость??
+        //Делаю удалять все вхождения, несмотря на Case
+        return base.replaceAll("(?i)" + remove, "");
     }
 
     @Override
@@ -26,9 +29,16 @@ public class SimpleTextService implements TextService {
     @Override
     public String concatenate(String... elements) {
         StringBuilder builder = new StringBuilder();
+
         for (String strings : elements) {
+            if (strings == null) {
+                continue;
+            }
+            //если честно так и не понял почему - Код пишем в {…} даже если он состоит из одной строки.
+            //ведь так хорошо читается if(strings == null) continue; ИМХО
             builder.append(strings);
         }
+
         return builder.toString();
     }
 
@@ -52,15 +62,15 @@ public class SimpleTextService implements TextService {
         if (string.equals("")) {
             return false;//Хотя может нада true??
         }
+        //Удаляем все кроме букв русского и английского языка, или я не прав?
         string = string.replaceAll("[^A-Za-zА-Яа-я]", "");
-        //Удаляем все кроме букв, работает только с русскими и английскими языками, или я не прав?
-        System.out.println("1 " + string);
+
         StringBuilder builder = new StringBuilder();
         for (int i = string.length() - 1; i >= 0; i--) {
             String symbol = String.valueOf(string.charAt(i));
             builder.append(symbol);
         }
-        System.out.println("2 " + builder.toString());
+
         //Специально игнорирую Case, т.к. иначе ароза != Ароза, хотя можно было сначала убрать Case из строки, но решил так
         return string.equalsIgnoreCase(builder.toString());
     }
