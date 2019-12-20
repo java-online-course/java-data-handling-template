@@ -1,20 +1,9 @@
 package com.epam.izh.rd.online.service;
 
 public class SimpleTextService implements TextService {
-    //TODO удалить все sout
-
-    /**
-     * Реализовать функционал удаления строки из другой строки.
-     * <p>
-     * Например для базовой строки "Hello, hello, hello, how low?" и строки для удаления ", he"
-     * метод вернет "Hellollollo, how low?"
-     *
-     * @param base   - базовая строка с текстом
-     * @param remove - строка которую необходимо удалить
-     */
     @Override
     public String removeString(String base, String remove) {
-        //А удалять все вхождения или первое?? не написано! Case учитывать??
+        //А удалять все вхождения или первое?? Case учитывать??
         //Хотя может это сделано, что бы проверить мою внимательность и догадливость??
         //Делаю удалять все вхождения, несмотря на Case
         return base.replaceAll("(?i)" + remove, "");
@@ -22,6 +11,14 @@ public class SimpleTextService implements TextService {
 
     @Override
     public boolean isQuestionString(String text) {
+        if (text == null) {
+            return false;
+        }
+
+        if (text.equals("")) {
+            return false;
+        }
+
         String lastSymbol = String.valueOf(text.charAt(text.length() - 1));
         return lastSymbol.contains("?");
     }
@@ -42,25 +39,31 @@ public class SimpleTextService implements TextService {
         return builder.toString();
     }
 
-    /**
-     * Реализовать функционал изменения регистра в вид лесенки.
-     * Возвращаемый текст должен начинаться с прописного регистра.
-     * <p>
-     * Например для строки "Load Up On Guns And Bring Your Friends"
-     * метод вернет "lOaD Up oN GuNs aNd bRiNg yOuR FrIeNdS".
-     */
     @Override
     public String toJumpCase(String text) {
-        return null; //TODO
+        StringBuilder builder = new StringBuilder();
+
+        String symbol;
+        for (int i = 0; i < text.length(); i++) {
+            if ((i + 1) % 2 == 0) {
+                symbol = String.valueOf(text.charAt(i)).toUpperCase();
+            } else {
+                symbol = String.valueOf(text.charAt(i)).toLowerCase();
+            }
+            builder.append(symbol);
+        }
+
+        return builder.toString();
     }
 
     @Override
     public boolean isPalindrome(String string) {
         if (string == null) {
-            return false;//Хотя может нада true??
+            return false;
         }
+
         if (string.equals("")) {
-            return false;//Хотя может нада true??
+            return false;
         }
         //Удаляем все кроме букв русского и английского языка, или я не прав?
         string = string.replaceAll("[^A-Za-zА-Яа-я]", "");
