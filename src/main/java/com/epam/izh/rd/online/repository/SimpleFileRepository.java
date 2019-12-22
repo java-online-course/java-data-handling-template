@@ -105,6 +105,7 @@ public class SimpleFileRepository implements FileRepository {
      * @param name имя файла
      * @return был ли создан файл
      */
+    //У меня файл создался
     @Override
     public boolean createFile(String path, String name) {
         StringBuilder newFile = new StringBuilder();
