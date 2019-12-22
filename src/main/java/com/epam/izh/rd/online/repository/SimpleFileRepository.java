@@ -4,6 +4,7 @@ import java.io.File;
 
 public class SimpleFileRepository implements FileRepository {
     static long countFiles = 0;
+    static long countDir = 1; //1 для того, что бы сосчитать саму ROOT
 
     /**
      * Метод рекурсивно подсчитывает количество файлов в директории
@@ -38,7 +39,20 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public long countDirsInDirectory(String path) {
-        return 0;
+        File dir = new File(path);
+
+        File[] files = dir.listFiles();
+        if (files == null) {
+            return 0;
+        }
+        for (File need : files) {
+            if (need.isDirectory()) {
+                countDir++;
+                countDirsInDirectory(need.getPath());
+            }
+
+        }
+        return countDir;
     }
 
     /**
