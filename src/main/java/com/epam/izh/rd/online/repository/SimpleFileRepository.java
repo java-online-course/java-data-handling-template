@@ -105,7 +105,7 @@ public class SimpleFileRepository implements FileRepository {
      * @param name имя файла
      * @return был ли создан файл
      */
-    //У меня файл создался
+    //У меня файл создался, но тест не пройден
     @Override
     public boolean createFile(String path, String name) {
         StringBuilder newFile = new StringBuilder();
@@ -117,7 +117,7 @@ public class SimpleFileRepository implements FileRepository {
             e.printStackTrace();
         }
         return false;
-    } //У меня файл создался, но тест не пройден
+    }
 
     /**
      * Метод считывает тело файла .txt из папки src/main/resources
