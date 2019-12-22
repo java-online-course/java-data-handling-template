@@ -117,7 +117,7 @@ public class SimpleFileRepository implements FileRepository {
             e.printStackTrace();
         }
         return false;
-    }
+    } //У меня файл создался, но тест не пройден
 
     /**
      * Метод считывает тело файла .txt из папки src/main/resources
