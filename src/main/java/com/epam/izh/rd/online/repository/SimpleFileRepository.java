@@ -107,6 +107,14 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public boolean createFile(String path, String name) {
+        StringBuilder newFile = new StringBuilder();
+        newFile.append(path).append(System.getProperty("file.separator")).append(name).append(".txt");
+        File file = new File(newFile.toString());
+        try {
+            return file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
