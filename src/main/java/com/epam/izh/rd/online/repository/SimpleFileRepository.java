@@ -129,8 +129,11 @@ public class SimpleFileRepository implements FileRepository {
     //И опять, у меня метод работает, наверное, что то с проверкой
     @Override
     public String readFileFromResources(String fileName) {
+        //Дописал жесткую связку в src\main\resources
+        String pathIS = "src" + System.getProperty("file.separator") + "main" + System.getProperty("file.separator") + "resources"
+                + System.getProperty("file.separator") + fileName;
         try {
-            return new String(Files.readAllBytes(Paths.get(fileName)));
+            return new String(Files.readAllBytes(Paths.get(pathIS)));
         } catch (IOException e) {
             e.printStackTrace();
         }
