@@ -63,7 +63,7 @@ public class SimpleFileRepository implements FileRepository {
      * @param from путь откуда
      * @param to   путь куда
      */
-    //В тестах вабще забыли про тест этого метода
+    //В тестах совсем забыли про тест этого метода
     @Override
     public void copyTXTFiles(String from, String to) {
         File dir = new File(from + "\\");
