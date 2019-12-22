@@ -1,6 +1,9 @@
 package com.epam.izh.rd.online.repository;
 
+import java.io.File;
+
 public class SimpleFileRepository implements FileRepository {
+    static long countFiles = 0;
 
     /**
      * Метод рекурсивно подсчитывает количество файлов в директории
@@ -10,7 +13,21 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public long countFilesInDirectory(String path) {
-        return 0;
+        File dir = new File(path);
+
+        File[] files = dir.listFiles();
+        if (files == null) {
+            return 0;
+        }
+        for (File need : files) {
+            if (need.isDirectory()) {
+                countFilesInDirectory(need.getPath());
+            }
+            if (need.isFile()) {
+                countFiles++;
+            }
+        }
+        return countFiles;
     }
 
     /**

@@ -5,16 +5,19 @@ import com.epam.izh.rd.online.repository.SimpleFileRepository;
 import java.io.File;
 
 public class SimpleFileRepositoryTest {
-    static int count = 0;
+    static int countFiles = 0;
     public static void main(String[] args) {
         int count = 0;
 
         SimpleFileRepository simpleFileRepository = new SimpleFileRepository();
-        System.out.println(count("F:\\"));
+        //указываю путь к папке где у меня лежит проект и получаю как раз эти 10 файлов, но тесты не проходят!!
+        //Что не так??
+       long files = simpleFileRepository.countFilesInDirectory("E:\\Git\\java-data-handling-template\\src\\main\\resources\\testDirCountFiles");
+        System.out.println(files);
     }
 
     public static void countPlus() {
-        count++;
+        countFiles++;
     }
     public static int count(String path) {
         File dir = new File(path);
@@ -30,6 +33,6 @@ public class SimpleFileRepositoryTest {
             }
         }
 
-        return count;
+        return countFiles;
     }
 }
