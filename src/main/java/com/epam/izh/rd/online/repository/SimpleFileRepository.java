@@ -1,6 +1,8 @@
 package com.epam.izh.rd.online.repository;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 public class SimpleFileRepository implements FileRepository {
     static long countFiles = 0;
@@ -61,9 +63,39 @@ public class SimpleFileRepository implements FileRepository {
      * @param from путь откуда
      * @param to   путь куда
      */
+    //В тестах вабще забыли про тест этого метода
     @Override
     public void copyTXTFiles(String from, String to) {
-        return;
+        File dir = new File(from + "\\");
+        File[] files = dir.listFiles();
+        assert files != null;
+        for (File need : files) {
+            //В задании про подпапки нечего не сказано, да и работют, они в моей реализации не очень, файл папкаОткуда\Подпапка\файл.txt копируется в
+            // папкуКуда\файл.txt, подпапка не создается, как сделать правильно, пока ума не хватает
+            //поэтому подпапки закоментировал
+//            if (need.isDirectory()) {
+//                copyTXTFiles(need.getPath(), to);
+//            }
+            if (need.isFile()) {
+                if (need.toPath().toString().substring(need.toPath().toString().length() - 4).equalsIgnoreCase(".txt")) {
+                    to = to + "\\";
+                    File newFile = new File(to + need.getPath().substring((from + "\\").length()));
+                    copyOneFile(need.toPath().toString(), newFile.toString());
+                }
+            }
+        }
+    }
+
+    //Не знаю можно или нет, но делаю доп метод
+    void copyOneFile(String from, String to) {
+        File source = new File(from);
+        File dest = new File(to);
+
+        try {
+            Files.copy(source.toPath(), dest.toPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
