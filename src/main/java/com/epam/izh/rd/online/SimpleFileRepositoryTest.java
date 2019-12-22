@@ -27,7 +27,8 @@ public class SimpleFileRepositoryTest {
 //        copyOneFile("F:\\5\\6.txt","F:\\10\\6.txt");
 //        copyTXTFiles("F:\\10", "F:\\10C");
 //        simpleFileRepository.copyTXTFiles("F:\\10", "F:\\10C");
-        simpleFileRepository.createFile("F:\\10C", "create");
+//        simpleFileRepository.createFile("F:\\10C", "create");
+//        System.out.println(simpleFileRepository.readFileFromResources("F:\\10\\proba.txt"));
     }
 
     public static void copyTXTFiles(String dirFrom, String dirTo) {

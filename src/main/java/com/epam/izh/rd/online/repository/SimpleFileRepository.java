@@ -3,6 +3,7 @@ package com.epam.izh.rd.online.repository;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class SimpleFileRepository implements FileRepository {
     static long countFiles = 0;
@@ -125,8 +126,14 @@ public class SimpleFileRepository implements FileRepository {
      * @param fileName имя файла
      * @return контент
      */
+    //И опять, у меня метод работает, наверное, что то с проверкой
     @Override
     public String readFileFromResources(String fileName) {
+        try {
+            return new String(Files.readAllBytes(Paths.get(fileName)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 }
