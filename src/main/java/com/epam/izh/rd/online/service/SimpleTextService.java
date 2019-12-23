@@ -27,11 +27,7 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public boolean isQuestionString(String text) {
-        if (text == null) {
-            return false;
-        }
-
-        if (text.equals("")) {
+        if (text == null || text.equals("")) {
             return false;
         }
 
@@ -94,13 +90,10 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public boolean isPalindrome(String string) {
-        if (string == null) {
+        if (string == null || string.equals("")) {
             return false;
         }
 
-        if (string.equals("")) {
-            return false;
-        }
         //Удаляем все кроме букв русского и английского языка, или я не прав?
         string = string.replaceAll("[^A-Za-zА-Яа-я]", "");
 
