@@ -37,17 +37,18 @@ public class SimpleRegExpService implements RegExpService {
      *
      * @return обработанный текст
      */
+    //Не знаю почему, но ошибка, проверил текст в тесте, все слово в слово, пробелов лишних нет, что не так??
     @Override
     public String replacePlaceholders(double paymentAmount, double balance) {
         String forFormat = simpleFileRepository.readFileFromResources("sensitive_data.txt");
-        Pattern patternPayment = Pattern.compile("\\$\\{payment_amount\\}");
+        Pattern patternPayment = Pattern.compile("\\$\\{payment_amount}");
 
         Matcher matcherPayment = patternPayment.matcher(forFormat);
         while (matcherPayment.find()) {
-            forFormat = forFormat.replaceAll("\\$\\{payment_amount\\}", String.format("%.0f", paymentAmount));
+            forFormat = forFormat.replaceAll("\\$\\{payment_amount}", String.format("%.0f", paymentAmount));
 
         }
-        Pattern patternBalance = Pattern.compile("\\$\\{balance\\}");
+        Pattern patternBalance = Pattern.compile("\\$\\{balance}");
         Matcher matcherBalance = patternBalance.matcher(forFormat);
         while (matcherBalance.find()) {
             forFormat = forFormat.replaceAll("\\$\\{balance\\}", String.format("%.0f", balance));
