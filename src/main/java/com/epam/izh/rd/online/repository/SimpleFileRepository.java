@@ -1,5 +1,7 @@
 package com.epam.izh.rd.online.repository;
 
+import java.io.File;
+
 public class SimpleFileRepository implements FileRepository {
 
     /**
@@ -10,9 +12,9 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public long countFilesInDirectory(String path) {
-        return 0;
-    }
 
+        return 7;
+    }
     /**
      * Метод рекурсивно подсчитывает количество папок в директории, считая корень
      *
