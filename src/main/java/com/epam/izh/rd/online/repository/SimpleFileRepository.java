@@ -168,7 +168,7 @@ public class SimpleFileRepository implements FileRepository {
         if (!name.endsWith(TYPE_TXT)) {
             filePathIS = pathWithSeparator + name + TYPE_TXT;
         } else {
-            filePathIS = path + name;
+            filePathIS = pathWithSeparator + name;
         }
 
         File file = new File(filePathIS);

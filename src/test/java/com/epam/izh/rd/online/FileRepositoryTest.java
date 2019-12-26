@@ -15,8 +15,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FileRepositoryTest {
 
-    private static final String TEST_DIR_COUNT_PATH = "testDirCountFiles";
-    private static final String TEST_DIR_CREATE_PATH = "testDirCreateFile";
+    //    private static final String TEST_DIR_COUNT_PATH = "testDirCountFiles";
+    //    private static final String TEST_DIR_CREATE_PATH = "testDirCreateFile";
+    //Изменяю с разрешения
+    private static final String TEST_DIR_COUNT_PATH = "src" + System.getProperty("file.separator") + "main"
+            + System.getProperty("file.separator") + "resources" + System.getProperty("file.separator")
+            + "testDirCountFiles" + System.getProperty("file.separator");
+    private static final String TEST_DIR_CREATE_PATH = "src" + System.getProperty("file.separator") + "main"
+            + System.getProperty("file.separator") + "resources" + System.getProperty("file.separator")
+            + "testDirCreateFile" + System.getProperty("file.separator");
+
     private static final String TEST_FILE_TO_CREATE = "newFile.txt";
 
     private static FileRepository fileRepository;
@@ -28,7 +36,9 @@ public class FileRepositoryTest {
 
     @BeforeEach
     void clean() {
-        File file = getFile(TEST_DIR_CREATE_PATH + "/" + TEST_FILE_TO_CREATE);
+        //Изменяю с разрешения
+        //Original File file = getFile(TEST_DIR_CREATE_PATH + "/" + TEST_FILE_TO_CREATE);
+        File file = getFile(TEST_DIR_CREATE_PATH  + TEST_FILE_TO_CREATE);
         if (file.exists()) {
             file.delete();
         }
@@ -51,7 +61,9 @@ public class FileRepositoryTest {
     void testCreateFile() {
         fileRepository.createFile(TEST_DIR_CREATE_PATH, TEST_FILE_TO_CREATE);
 
-        assertTrue(getFile(TEST_DIR_CREATE_PATH + "/" + TEST_FILE_TO_CREATE).exists());
+        //Изменяю с разрешения
+        //Original assertTrue(getFile(TEST_DIR_CREATE_PATH + "/" + TEST_FILE_TO_CREATE).exists());
+        assertTrue(getFile(TEST_DIR_CREATE_PATH  + TEST_FILE_TO_CREATE).exists());
     }
 
     @Test
@@ -64,6 +76,9 @@ public class FileRepositoryTest {
     private File getFile(String path) {
         ClassLoader classLoader = getClass().getClassLoader();
         URL resource = classLoader.getResource(path);
+        //Тут почему то null хотя файл создается, соответственно
+        //1 - файл не удаляется в методе void clean()
+        //2 - выходит assert в testCreateFile
         if (resource != null) {
             return new File(resource.getFile());
         }

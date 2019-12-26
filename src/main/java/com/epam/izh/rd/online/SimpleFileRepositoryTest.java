@@ -10,23 +10,20 @@ public class SimpleFileRepositoryTest {
         //Что не так??
         //Скорее всего дело в путях, что то напутали в относительных путях (Винда, *NIX), или напрочь забыли указать папку resources. ИМХО
         //Ну или я где то налажал
-        long files = simpleFileRepository.countFilesInDirectory("E:\\Git\\java-data-handling-template\\src\\main\\resources\\testDirCountFiles");
+        long files = simpleFileRepository.countFilesInDirectory("G:\\");
         System.out.println(files);
 
         //Аналогично, указываю путь к папке где у меня лежит проект и получаю как раз эти 7 папок, но тесты не проходят!!
         //Что не так??
         //Скорее всего дело в путях, что то напутали в относительных путях (Винда, *NIX), или напрочь забыли указать папку resources. ИМХО
         //Ну или я где то налажал
-        long dir = simpleFileRepository.countDirsInDirectory("E:\\Git\\java-data-handling-template\\src\\main\\resources\\testDirCountFiles");
+        long dir = simpleFileRepository.countDirsInDirectory("G:\\");
         System.out.println(dir);
 
         //Пробовал на своей флешке - работает, в тестах вабще забыли про данный метод
-        simpleFileRepository.copyTXTFiles("D:\\2\\", null);
+        simpleFileRepository.copyTXTFiles("G:\\333", "G:\\333c");
 
         //Метод создает файл на диске с расширением txt, работает, но тест не проходит
-        System.out.println(simpleFileRepository.createFile("D:\\2", "txtfile_1"));
-        System.out.println(simpleFileRepository.createFile("D:\\2\\", "txtfile_2"));
-        System.out.println(simpleFileRepository.createFile("D:\\2\\", "txtfile_3.txt"));
-        System.out.println(simpleFileRepository.createFile("D:\\2", "txtfile_4.txt"));
+        System.out.println(simpleFileRepository.createFile("G:\\2", "txtfile_1"));
     }
 }
