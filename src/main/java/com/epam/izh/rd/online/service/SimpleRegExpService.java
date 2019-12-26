@@ -2,11 +2,17 @@ package com.epam.izh.rd.online.service;
 
 import com.epam.izh.rd.online.repository.SimpleFileRepository;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SimpleRegExpService implements RegExpService {
+    final static String SEPARATOR = System.getProperty("file.separator");
+    //Это конечно плохо, но т.к. явно сказано изменить файл sensitive_data.txt (из директории resources), хардкодю путь к нему
+    final String filePathIS = "src" + SEPARATOR + "main" + SEPARATOR + "resources" + SEPARATOR + "sensitive_data.txt";
     SimpleFileRepository simpleFileRepository = new SimpleFileRepository();
+
 
     /**
      * Метод должен читать файл sensitive_data.txt (из директории resources) и маскировать в нем конфиденциальную информацию.
@@ -27,6 +33,14 @@ public class SimpleRegExpService implements RegExpService {
             matcher.appendReplacement(stringBuffer, "$1 **** ****$3");
         }
         matcher.appendTail(stringBuffer);
+
+        try {
+            FileWriter fileWriter = new FileWriter(filePathIS, false);
+            fileWriter.write(stringBuffer.toString());
+            fileWriter.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         return stringBuffer.toString();
     }
@@ -51,7 +65,15 @@ public class SimpleRegExpService implements RegExpService {
         Pattern patternBalance = Pattern.compile("\\$\\{balance}");
         Matcher matcherBalance = patternBalance.matcher(forFormat);
         while (matcherBalance.find()) {
-            forFormat = forFormat.replaceAll("\\$\\{balance\\}", String.format("%.0f", balance));
+            forFormat = forFormat.replaceAll("\\$\\{balance}", String.format("%.0f", balance));
+        }
+
+        try {
+            FileWriter fileWriter = new FileWriter(filePathIS, false);
+            fileWriter.write(forFormat);
+            fileWriter.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return forFormat;
     }
