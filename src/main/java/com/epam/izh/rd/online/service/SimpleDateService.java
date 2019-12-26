@@ -14,7 +14,7 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public String parseDate(LocalDate localDate) {
-        return null;
+        return localDate.format(DateTimeFormatter.ofPattern("dd-MM-YYYY"));
     }
 
     /**
@@ -25,7 +25,7 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public LocalDateTime parseString(String string) {
-        return null;
+        return LocalDateTime.parse(string, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
     /**
@@ -37,7 +37,7 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public String convertToCustomFormat(LocalDate localDate, DateTimeFormatter formatter) {
-        return null;
+        return localDate.format(formatter);
     }
 
     /**
@@ -47,7 +47,17 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public long getNextLeapYear() {
-        return 0;
+        //Неясно следующий високосный год от чего (от какой даты)??
+        //Либо метод должен принимать int year, либо LocalDate.now(), судя по проверке, на 2020 год, это все таки LocalDate.now()
+        //Делаю LocalDate.now()
+        //да и похоже те, кто будут делать это задание в 2020, не пройдут, в проверке, как я понял, 2020 год, а следующий високосный после 2020 - 2024
+        int year = LocalDate.now().getYear(); //Узнаем текущий год
+        do {
+            year++;
+        } //Если год делиться на 366 без остатка, он високосный
+        while (LocalDateTime.of(year, 12, 31, 0, 0).getDayOfYear() % 366 != 0);
+
+        return year;
     }
 
     /**
@@ -57,7 +67,8 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public long getSecondsInYear(int year) {
-        return 0;
+        //Узнаем сколько дней в году year, используя getDayOfYear и умножаем на 24 часа, 60 минут, 60 секунд
+        return LocalDateTime.of(year, 12, 31, 0, 0).getDayOfYear() * 24 * 60 * 60;
     }
 
 
