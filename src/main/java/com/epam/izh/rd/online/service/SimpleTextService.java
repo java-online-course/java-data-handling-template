@@ -13,7 +13,7 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String removeString(String base, String remove) {
-        return null; //TODO
+        return base.replace(remove, "");
     }
 
     /**
@@ -24,7 +24,10 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public boolean isQuestionString(String text) {
-        return false; //TODO
+        if (text.endsWith("?")) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -35,7 +38,12 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String concatenate(String... elements) {
-        return null; //TODO
+        String result = "";
+        for (String elem: elements) {
+            String[] accumulator = {result, elem};
+            result = String.join(" ", accumulator).trim();
+        }
+        return result;
     }
 
     /**
@@ -47,7 +55,17 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String toJumpCase(String text) {
-        return null; //TODO
+        StringBuffer sb = new StringBuffer(text.length());
+        Character letter;
+        for (int i = 0; i < text.length(); i++) {
+            letter = text.charAt(i);
+            if (i % 2 == 0) {
+                sb.append(String.valueOf(letter).toLowerCase());
+            } else {
+                sb.append(String.valueOf(letter).toUpperCase());
+            }
+        }
+        return sb.toString();
     }
 
     /**
@@ -59,6 +77,19 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public boolean isPalindrome(String string) {
-       return false; //TODO
+        if (string.length() < 2) {
+            return false;
+        }
+
+        String text = string.replace(" ", "");
+        int len = text.length();
+        for (int i = 0; i < len / 2; i++) {
+            String leftPart = String.valueOf(text.charAt(i)).toLowerCase();
+            String rightPart = String.valueOf(text.charAt(len - i - 1)).toLowerCase();
+            if (leftPart.compareTo(rightPart) != 0) {
+                return false;
+            }
+        }
+        return true;
     }
 }
