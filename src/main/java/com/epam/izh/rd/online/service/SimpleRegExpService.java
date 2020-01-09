@@ -1,8 +1,6 @@
 package com.epam.izh.rd.online.service;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
@@ -19,7 +17,8 @@ public class SimpleRegExpService implements RegExpService {
     public String maskSensitiveData() {
         String result = "";
         try {
-            BufferedReader br = new BufferedReader(new FileReader("src/main/resources/sensitive_data.txt"));
+            BufferedReader br = new BufferedReader(new InputStreamReader(
+                    new FileInputStream("src/main/resources/sensitive_data.txt"), "UTF-8"));
             String s = br.readLine();
             br.close();
 
@@ -46,9 +45,10 @@ public class SimpleRegExpService implements RegExpService {
     public String replacePlaceholders(double paymentAmount, double balance) {
         String result = "";
         try {
-            BufferedReader bf = new BufferedReader(new FileReader("src/main/resources/sensitive_data.txt"));
-            String s = bf.readLine();
-            bf.close();
+            BufferedReader br = new BufferedReader(new InputStreamReader(
+                    new FileInputStream("src/main/resources/sensitive_data.txt"), "UTF-8"));
+            String s = br.readLine();
+            br.close();
 
             Pattern p = Pattern.compile("\\W\\Wpayment_amount\\W");
             Matcher m = p.matcher(s);
