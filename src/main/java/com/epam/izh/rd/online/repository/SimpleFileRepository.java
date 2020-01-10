@@ -1,6 +1,15 @@
 package com.epam.izh.rd.online.repository;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+
 public class SimpleFileRepository implements FileRepository {
+    long countDir = 0;
+    long countFile = 0;
 
     /**
      * Метод рекурсивно подсчитывает количество файлов в директории
@@ -10,7 +19,17 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public long countFilesInDirectory(String path) {
-        return 0;
+        File folder = new File("C:\\Users\\\u041b\u0438\u044f\\IdeaProjects\\java-data-handling-template\\src\\main\\resources\\" + path);
+        File[] files = folder.listFiles();
+        for (File file : files) {
+            if (file.isFile())
+                countFile++;
+            if (file.isDirectory()) {
+                String newPath = path + "\\" + file.getName();
+                countFilesInDirectory(newPath);
+            }
+        }
+        return countFile;
     }
 
     /**
@@ -21,7 +40,16 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public long countDirsInDirectory(String path) {
-        return 0;
+        File folder = new File("C:\\Users\\\u041b\u0438\u044f\\IdeaProjects\\java-data-handling-template\\src\\main\\resources\\" + path);
+        File[] files = folder.listFiles();
+        for (File file : files) {
+            if (file.isDirectory()) {
+                countDir++;
+                String newPath = path + "\\" + file.getName();
+                countDirsInDirectory(newPath);
+            }
+        }
+        return countDir + 1;
     }
 
     /**
@@ -32,7 +60,17 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public void copyTXTFiles(String from, String to) {
-        return;
+        File folder = new File(from);
+        File[] listOfFiles = folder.listFiles();
+        Path destDir = Paths.get(to);
+        if (listOfFiles != null)
+            for (File file : listOfFiles) {
+                try {
+                    Files.copy(file.toPath(), destDir.resolve(file.getName()), REPLACE_EXISTING);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
     }
 
     /**
@@ -44,7 +82,15 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public boolean createFile(String path, String name) {
-        return false;
+        File filePath = new File("C:\\Programs\\java-data-handling-template\\target\\classes\\" + path);
+        filePath.mkdir();
+        File file = new File(filePath, name);
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file.exists();
     }
 
     /**
@@ -55,6 +101,16 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public String readFileFromResources(String fileName) {
-        return null;
+        String line;
+        StringBuilder string = new StringBuilder();
+        try (FileReader reader = new FileReader("src\\main\\resources\\" + fileName)) {
+            BufferedReader bufferedReader = new BufferedReader(reader);
+            while ((line = bufferedReader.readLine()) != null) {
+                string.append(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return string.toString();
     }
 }

@@ -4,6 +4,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static java.time.Year.isLeap;
+import static java.time.temporal.ChronoUnit.SECONDS;
+
 public class SimpleDateService implements DateService {
 
     /**
@@ -14,7 +17,7 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public String parseDate(LocalDate localDate) {
-        return null;
+        return localDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     }
 
     /**
@@ -25,7 +28,7 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public LocalDateTime parseString(String string) {
-        return null;
+        return LocalDateTime.parse(string, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
     /**
@@ -37,7 +40,7 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public String convertToCustomFormat(LocalDate localDate, DateTimeFormatter formatter) {
-        return null;
+        return localDate.format(formatter);
     }
 
     /**
@@ -47,7 +50,14 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public long getNextLeapYear() {
-        return 0;
+        long year = LocalDate.now().getYear();
+        for (int i = 0; i < 4; i++) {
+            year += i;
+            if (isLeap(year)) {
+                break;
+            }
+        }
+        return year;
     }
 
     /**
@@ -57,7 +67,9 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public long getSecondsInYear(int year) {
-        return 0;
+        LocalDateTime time1 = LocalDateTime.of(year, 1, 1, 0, 0);
+        LocalDateTime time2 = LocalDateTime.of(year + 1, 1, 1, 0, 0);
+        return SECONDS.between(time1, time2);
     }
 
 
