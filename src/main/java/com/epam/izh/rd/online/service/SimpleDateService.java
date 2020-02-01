@@ -1,8 +1,12 @@
 package com.epam.izh.rd.online.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class SimpleDateService implements DateService {
 
@@ -14,7 +18,8 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public String parseDate(LocalDate localDate) {
-        return null;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        return formatter.format(localDate);
     }
 
     /**
@@ -25,7 +30,10 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public LocalDateTime parseString(String string) {
-        return null;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd H:mm");
+        LocalDate date = LocalDate.parse(string, formatter);
+        LocalTime time = LocalTime.parse(string,formatter);
+        return LocalDateTime.of(date,time);
     }
 
     /**
@@ -37,7 +45,7 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public String convertToCustomFormat(LocalDate localDate, DateTimeFormatter formatter) {
-        return null;
+        return formatter.format(localDate);
     }
 
     /**
@@ -47,7 +55,18 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public long getNextLeapYear() {
-        return 0;
+        LocalDate localDate = LocalDate.now();
+        int year = localDate.getYear();
+        boolean isLeapYear = false;
+        int count = 0;
+        while (!isLeapYear){
+            if(localDate.plusYears(count).getYear()%4==0){
+                isLeapYear = true;
+            }else {
+                count++;
+            }
+        }
+        return localDate.plusYears(count).getYear();
     }
 
     /**
@@ -57,8 +76,10 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public long getSecondsInYear(int year) {
-        return 0;
+        if (year % 4==0){
+            return 366*24*60*60;
+        }else{
+            return 365*24*60*60;
+        }
     }
-
-
 }
