@@ -1,5 +1,10 @@
 package com.epam.izh.rd.online.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 public class SimpleRegExpService implements RegExpService {
 
     /**
@@ -11,7 +16,14 @@ public class SimpleRegExpService implements RegExpService {
      */
     @Override
     public String maskSensitiveData() {
-        return null;
+        File text = new File("src/main/resources/sensitive_data.txt");
+        String inText = null;
+        try {
+            inText = Files.lines(Paths.get(String.valueOf(text.toPath()))).reduce("", String::concat);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return inText.replace("\\d{4}\\s\\d{4}\\s\\d{4}\\s\\d{4}", "\\d\\d\\d\\d\\s****\\s****\\s\\d\\d\\d\\d");
     }
 
     /**
@@ -22,6 +34,15 @@ public class SimpleRegExpService implements RegExpService {
      */
     @Override
     public String replacePlaceholders(double paymentAmount, double balance) {
-        return null;
+        File text = new File("src/main/resources/sensitive_data.txt");
+        String inText = null;
+        try {
+            inText = Files.lines(Paths.get(String.valueOf(text.toPath()))).reduce("", String::concat);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        inText = inText.replace("${payment_amount}", Double.toString(paymentAmount));
+        inText = inText.replace("${balance}", Double.toString(balance));
+        return inText;
     }
 }
