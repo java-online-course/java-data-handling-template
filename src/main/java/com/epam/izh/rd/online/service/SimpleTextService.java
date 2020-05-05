@@ -1,5 +1,8 @@
 package com.epam.izh.rd.online.service;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class SimpleTextService implements TextService {
 
     /**
@@ -13,7 +16,8 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String removeString(String base, String remove) {
-        return null; //TODO
+        base = base.replace (remove, "");
+        return base; //TODO
     }
 
     /**
@@ -24,9 +28,10 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public boolean isQuestionString(String text) {
-        return false; //TODO
+        Pattern p = Pattern.compile(".+\\?");
+        Matcher m = p.matcher(text);
+        return m.matches();
     }
-
     /**
      * Реализовать функционал соединения переданных строк.
      *
@@ -35,7 +40,11 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String concatenate(String... elements) {
-        return null; //TODO
+        String s = "";
+        for (int i = 0;i<elements.length; i++){
+        s = s.concat(elements[i]);
+        }
+        return s; //TODO
     }
 
     /**
@@ -47,7 +56,19 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String toJumpCase(String text) {
-        return null; //TODO
+        char[] res = new char[text.length()];
+        for (int i = 0; i < text.length(); ++i) {
+            char ch = text.charAt(i);
+            if (i%2 != 0) {
+                ch = Character.toUpperCase(ch);
+                res[i] = ch;
+            } else {
+                ch = Character.toLowerCase(ch);
+                res[i] = ch;
+            }
+        }
+        return new String(res);
+
     }
 
     /**
@@ -59,6 +80,23 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public boolean isPalindrome(String string) {
-       return false; //TODO
+        if (string == ""){
+            return false;
+        }
+        String B="";
+        String C=string.replace(" ","");
+        char[] mass =C.toCharArray();
+        char[] mass2=new char[mass.length];
+        for ( int i =mass.length-1; i>= 0;){
+            for(int j=0;j<mass2.length; j++){
+
+                mass2[j]=mass[i]; i--;
+
+                B+=mass2[j];
+
+            }
+
+        }
+        return B.equalsIgnoreCase(C);
     }
 }

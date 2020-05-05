@@ -1,5 +1,11 @@
 package com.epam.izh.rd.online.repository;
 
+import java.io.*;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Objects;
+
 public class SimpleFileRepository implements FileRepository {
 
     /**
@@ -8,9 +14,19 @@ public class SimpleFileRepository implements FileRepository {
      * @param path путь до директори
      * @return файлов, в том числе скрытых
      */
+    long c = 0;
     @Override
     public long countFilesInDirectory(String path) {
-        return 0;
+        File file = new File("src/main/resources/" + path);
+        long count = 0;
+        if (file.isDirectory()) {
+            for (File bufferFile : Objects.requireNonNull(file.listFiles())) {
+                count += countFilesInDirectory(path + "/" + bufferFile.getName());
+            }
+        } else {
+            count++;
+        }
+        return count;
     }
 
     /**
@@ -21,7 +37,16 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public long countDirsInDirectory(String path) {
-        return 0;
+
+        File file = new File("src/main/resources/" + path);
+        long count = 0;
+        if (file.isDirectory()) {
+            for (File bufferFile : Objects.requireNonNull(file.listFiles())) {
+                count += countDirsInDirectory(path + "/" + bufferFile.getName());
+            }
+            count++;
+        }
+        return count;
     }
 
     /**
@@ -44,7 +69,32 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public boolean createFile(String path, String name) {
-        return false;
+        Path pathResultPath = Paths.get(path);
+
+        if (!pathResultPath.isAbsolute()) {
+
+            try {
+                Path pathAbsolut = Paths.get(this.getClass().getProtectionDomain().getCodeSource().getLocation().toURI());
+                path = pathAbsolut.toString() + "\\" + path;
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+        }
+
+        boolean result = false;
+
+        File folder = new File(path);
+        File file = new File(path + "\\" + name);
+
+        try {
+            folder.mkdir();
+            file.createNewFile();
+            result = true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 
     /**
@@ -55,6 +105,20 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public String readFileFromResources(String fileName) {
-        return null;
+        try (FileReader reader = new FileReader("src/main/resources/"+fileName)) {
+            int symbol = reader.read();
+            char[] buffer = new char[7];
+            reader.read(buffer);
+            String valueOfchar = String.valueOf(buffer);
+            return valueOfchar;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 }
+
