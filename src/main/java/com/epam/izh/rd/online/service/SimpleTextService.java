@@ -14,7 +14,7 @@ public class SimpleTextService implements TextService {
     @Override
     public String removeString(String base, String remove) {
         String s = base;
-        s = s.replaceAll("remove", "");
+        s = s.replaceAll(remove, "");
         return s;
     }
 
@@ -26,6 +26,7 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public boolean isQuestionString(String text) {
+        if (text.length() == 0) return false;
         return (text.charAt(text.length()-1) == '?');
     }
 
@@ -53,11 +54,15 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String toJumpCase(String text) {
-        String s = text.substring(0, 1).toLowerCase();
-        s += text.substring(1, 2).toUpperCase();
-        for (int i = 0; i < text.length(); i++) {
-            if (i%2 == 0) s += text.substring(i, i+1).toLowerCase();
-            else s += text.substring(i, i+1).toUpperCase();
+        String s = "";
+        if (text.length() > 0) s += text.substring(0, 1).toLowerCase();
+        if (text.length() > 1) s += text.substring(1, 2).toUpperCase();
+        if (text.length() > 2) {
+            for (int i = 2; i < text.length(); i++) {
+                if (text.charAt(i) < 65 && text.charAt(i) > 90 && text.charAt(i) < 97 && text.charAt(i) > 122) continue;
+                    if (i%2 == 0) s += text.substring(i, i+1).toLowerCase();
+                    else s += text.substring(i, i+1).toUpperCase();
+            }
         }
         return s;
     }
@@ -72,9 +77,11 @@ public class SimpleTextService implements TextService {
     @Override
     public boolean isPalindrome(String string) {
         boolean theString = true;
-        int l = string.length();
-        for (int i = 0; i < l; i++) {
-            if (string.charAt(i) != string.charAt(l-i-1)) {
+        String s  = string.replaceAll("\\s+", "").toLowerCase();
+        int l = s.length();
+        if (l < 2) return false;
+        for (int i = 0; i < l/2; i++) {
+            if (s.charAt(i) != s.charAt(l-i-1)) {
                 theString = false;
                 break;
             }
