@@ -1,5 +1,12 @@
 package com.epam.izh.rd.online.service;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class SimpleRegExpService implements RegExpService {
 
     /**
@@ -11,7 +18,24 @@ public class SimpleRegExpService implements RegExpService {
      */
     @Override
     public String maskSensitiveData() {
-        return null;
+        String s = "";
+        try (BufferedReader reader = new BufferedReader(new FileReader(
+                "D:\\java-data-handling-template\\src\\main\\resources\\sensitive_data.txt"))) {
+            s = reader.readLine();
+            Pattern patten = Pattern.compile("(\\d{4}\\s){4}");
+            Matcher matcher = patten.matcher(s); //строка счета
+            while(matcher.find()) {
+                    // группа - счет
+                    StringBuilder str = new StringBuilder(matcher.group()).replace(5, 14, "**** ****");
+                    s = s.replaceAll(matcher.group(), str.toString());
+
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return s;
     }
 
     /**
@@ -22,6 +46,17 @@ public class SimpleRegExpService implements RegExpService {
      */
     @Override
     public String replacePlaceholders(double paymentAmount, double balance) {
-        return null;
+        String s ="";
+        try (BufferedReader reader = new BufferedReader(new FileReader(
+                "D:\\java-data-handling-template\\src\\main\\resources\\sensitive_data.txt"))) {
+            s = reader.readLine();
+            s = s.replaceAll("\\${1}\\{[a-z]{7}_[a-z]{6}}", String.valueOf((int)paymentAmount));
+            s = s.replaceAll("\\${1}\\{[a-z]{7}}", String.valueOf((int)balance));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return s;
     }
 }
