@@ -3,6 +3,9 @@ package com.epam.izh.rd.online.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class SimpleDateService implements DateService {
 
@@ -14,7 +17,7 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public String parseDate(LocalDate localDate) {
-        return null;
+        return localDate.format(DateTimeFormatter.ofPattern("d-MM-yyyy"));
     }
 
     /**
@@ -25,7 +28,7 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public LocalDateTime parseString(String string) {
-        return null;
+        return LocalDateTime.parse(string, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
     /**
@@ -37,7 +40,7 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public String convertToCustomFormat(LocalDate localDate, DateTimeFormatter formatter) {
-        return null;
+        return localDate.format(formatter);
     }
 
     /**
@@ -47,7 +50,15 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public long getNextLeapYear() {
-        return 0;
+        LocalDate date = LocalDate.now();
+        int year = date.getYear();
+        GregorianCalendar calendar = new GregorianCalendar();
+        boolean leapYear = calendar.isLeapYear(year);
+        if (leapYear) {
+            return year;
+        } else {
+            return year + 4;
+        }
     }
 
     /**
@@ -57,8 +68,13 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public long getSecondsInYear(int year) {
-        return 0;
+        GregorianCalendar calendar = new GregorianCalendar();
+        boolean leapYear = calendar.isLeapYear(year);
+
+        if (leapYear) {
+            return 31622400;
+        } else {
+            return 31536000;
+        }
     }
-
-
 }

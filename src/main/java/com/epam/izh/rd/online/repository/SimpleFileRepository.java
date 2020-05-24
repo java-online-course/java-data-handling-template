@@ -1,5 +1,12 @@
 package com.epam.izh.rd.online.repository;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class SimpleFileRepository implements FileRepository {
 
     /**
@@ -10,7 +17,17 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public long countFilesInDirectory(String path) {
-        return 0;
+        int count = 0;
+        File file = new File("src\\main\\resources\\" + path);
+        File[] files = file.listFiles();
+        for (File f: files) {
+            if (f.isDirectory()) {
+                count += countFilesInDirectory(path + "\\" + f.getName());
+            } else {
+                count += 1;
+            }
+        }
+        return count;
     }
 
     /**
@@ -21,7 +38,16 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public long countDirsInDirectory(String path) {
-        return 0;
+        int count = 1;
+        File file = new File("src\\main\\resources\\" + path);
+        File[] files = file.listFiles();
+        for (File dir: files) {
+            if (dir.isDirectory()) {
+                count += countDirsInDirectory(path + "\\" + dir.getName());
+            }
+        }
+
+        return count;
     }
 
     /**
@@ -44,7 +70,19 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public boolean createFile(String path, String name) {
-        return false;
+
+        File dir = new File("src\\main\\resources\\" + path);
+        File file = new File(dir, name);
+        boolean createFile = false;
+        try {
+            boolean mkdir = dir.mkdir();
+            if (mkdir) {
+                createFile = file.createNewFile();
+            }
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+        return createFile;
     }
 
     /**
@@ -55,6 +93,14 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public String readFileFromResources(String fileName) {
-        return null;
+
+        String path = "src\\main\\resources\\" + fileName;
+        String content = "";
+        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
+            content = reader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return content;
     }
 }
