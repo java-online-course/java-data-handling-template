@@ -1,31 +1,34 @@
 package com.epam.izh.rd.online.repository;
 
-import sun.reflect.misc.FieldUtil;
 
 import java.io.*;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.Objects;
 
 public class SimpleFileRepository implements FileRepository {
-    private int countFiles = 0;
-    private int countDir = 0;
-
 
     /**
      * Метод рекурсивно подсчитывает количество файлов в директории
      *
-     * @param path путь до директори
+     * @param path путь до директории
      * @return файлов, в том числе скрытых
      */
 
     @Override
     public long countFilesInDirectory(String path) {
-        path = "src/main/resources/";
-        File file = new File(path);
-        File[] listFiles = file.listFiles();
-        for (int i = 0; i < listFiles.length; i++) {
-            if (listFiles[i].isFile()) {
-                countFiles++;
+        File file = new File("src/main/resources/" + path);
+        int countFiles = 0;
+        if (file.isDirectory()) {
+            for (File f : file.listFiles()) {
+                countFiles += countFilesInDirectory(path + "/" + f.getName());
             }
+        } else {
+            countFiles++;
         }
         return countFiles;
     }
@@ -38,13 +41,13 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public long countDirsInDirectory(String path) {
-        path = "src/main/resources/";
-        File file = new File(path);
-        File[] listFiles = file.listFiles();
-        for (int i = 0; i < listFiles.length; i++) {
-            if (listFiles[i].isDirectory()) {
-                countDir++;
+        File file = new File("src/main/resources/" + path);
+        int countDir = 0;
+        if (file.isDirectory()) {
+            for (File f : Objects.requireNonNull(file.listFiles())) {
+                countDir += countDirsInDirectory(path + "/" + f.getName());
             }
+            countDir++;
         }
         return countDir;
     }
@@ -57,9 +60,14 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public void copyTXTFiles(String from, String to) throws IOException {
-        File fileFrom = new File(from);
-        File fileTo = new File(to);
-        Files.copy(fileFrom.toPath(), fileTo.toPath());
+        File folder = new File(from);
+        File[] listOfFiles = folder.listFiles();
+        Path destination = Paths.get(to);
+        if (listOfFiles != null) {
+            for (File file : listOfFiles) {
+                Files.copy(file.toPath(), destination.resolve(file.getName()), StandardCopyOption.REPLACE_EXISTING);
+            }
+        }
     }
 
     /**
@@ -71,16 +79,20 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public boolean createFile(String path, String name) {
-        path = "src/main/resources/";
-        File filePath = new File(path);
-        filePath.mkdir();
-        File file = new File(filePath + "\\test.txt");
+        boolean isCreated = false;
         try {
-            file.createNewFile();
+            Path abs = Paths.get(this.getClass().getProtectionDomain().getCodeSource().getLocation().toURI());
+            path = abs.toString() + "\\" + path;
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        File file = new File(path + "\\" + name);
+        try {
+            isCreated = file.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return false;
+        return isCreated;
     }
 
     /**
@@ -94,7 +106,7 @@ public class SimpleFileRepository implements FileRepository {
         String content = "";
         String symbol;
         try {
-            FileReader fileReader = new FileReader("src/main/resources" + fileName);
+            FileReader fileReader = new FileReader("src/main/resources/" + fileName);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             while ((symbol = bufferedReader.readLine()) != null) {
                 content = symbol + content;
