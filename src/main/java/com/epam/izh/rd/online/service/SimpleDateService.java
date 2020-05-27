@@ -3,6 +3,8 @@ package com.epam.izh.rd.online.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class SimpleDateService implements DateService {
 
@@ -14,7 +16,9 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public String parseDate(LocalDate localDate) {
-        return null;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String currentDate = localDate.format(formatter);
+        return currentDate;
     }
 
     /**
@@ -25,7 +29,10 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public LocalDateTime parseString(String string) {
-        return null;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime localDateTime = LocalDateTime.parse(string, formatter);
+        return localDateTime;
+
     }
 
     /**
@@ -37,7 +44,8 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public String convertToCustomFormat(LocalDate localDate, DateTimeFormatter formatter) {
-        return null;
+        String currentDate = localDate.format(formatter);
+        return currentDate;
     }
 
     /**
@@ -47,7 +55,20 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public long getNextLeapYear() {
-        return 0;
+        int year = 2020;
+        long leapYear = -1;
+        GregorianCalendar gregorianCalendar = new GregorianCalendar();
+        for (int i = 0; i < 10; i++) {
+            gregorianCalendar.isLeapYear(year);
+            i++;
+            year++;   // тест не проходит, потому что "assertEquals(2020)",
+            // а нужно получить следующий високосный
+            //если убрать  year++, то тест пройдет
+            if (gregorianCalendar.isLeapYear(year)) {
+                leapYear = year;
+            }
+        }
+        return leapYear;
     }
 
     /**
@@ -57,7 +78,16 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public long getSecondsInYear(int year) {
-        return 0;
+        // високосный год - 60 секунд * 60 минут * 24 часа * 366 дней
+        // обычный год - 60 секунд * 60 минут * 24 часа * 365 дней
+        long seconds;
+        GregorianCalendar gregorianCalendar = new GregorianCalendar();
+        if (gregorianCalendar.isLeapYear(year)) {
+            seconds = 60 * 60 * 24 * 366;
+        } else {
+            seconds = 60 * 60 * 24 * 365;
+        }
+        return seconds;
     }
 
 
