@@ -1,8 +1,9 @@
 package com.epam.izh.rd.online.service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class SimpleDateService implements DateService {
 
@@ -14,7 +15,7 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public String parseDate(LocalDate localDate) {
-        return null;
+        return localDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     }
 
     /**
@@ -25,7 +26,10 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public LocalDateTime parseString(String string) {
-        return null;
+        String[] split = string.split("\\D");
+
+        return LocalDateTime.of(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2])
+                , Integer.parseInt(split[4]), Integer.parseInt(split[4]));
     }
 
     /**
@@ -37,7 +41,7 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public String convertToCustomFormat(LocalDate localDate, DateTimeFormatter formatter) {
-        return null;
+        return localDate.format(formatter);
     }
 
     /**
@@ -47,7 +51,14 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public long getNextLeapYear() {
-        return 0;
+        long year = 2019;
+        while (true) {
+            if (!Year.isLeap(year)) {
+                year++;
+                break;
+            }
+        }
+        return year;
     }
 
     /**
@@ -57,7 +68,11 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public long getSecondsInYear(int year) {
-        return 0;
+        LocalDate prevDate = LocalDate.of(year + 1, 1, 1);
+        LocalDate currentDate = LocalDate.of(year, 1, 1);
+
+        return prevDate.toEpochSecond(LocalTime.NOON, ZoneOffset.MIN)
+                - currentDate.toEpochSecond(LocalTime.NOON, ZoneOffset.MIN);
     }
 
 
