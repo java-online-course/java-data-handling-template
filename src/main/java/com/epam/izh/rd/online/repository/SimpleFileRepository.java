@@ -1,5 +1,9 @@
 package com.epam.izh.rd.online.repository;
 
+
+import java.io.*;
+import java.util.Objects;
+
 public class SimpleFileRepository implements FileRepository {
 
     /**
@@ -8,9 +12,18 @@ public class SimpleFileRepository implements FileRepository {
      * @param path путь до директори
      * @return файлов, в том числе скрытых
      */
+
     @Override
     public long countFilesInDirectory(String path) {
-        return 0;
+        File file = new File(Objects.requireNonNull(getClass()
+                .getClassLoader().getResource(path)).getFile());
+        int count = 0;
+        for (File f : Objects.requireNonNull(file.listFiles())) {
+            if (f.isDirectory()) {
+                count += countFilesInDirectory(path + "/" + f.getName());
+            } else count++;
+        }
+        return count;
     }
 
     /**
@@ -21,7 +34,16 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public long countDirsInDirectory(String path) {
-        return 0;
+        File file = new File(Objects.requireNonNull(getClass().getClassLoader()
+                .getResource(path)).getFile());
+        int count = 0;
+        if (file.isDirectory()) {
+            for (File f : Objects.requireNonNull(file.listFiles())) {
+                count += countDirsInDirectory(path + "/" + f.getName());
+            }
+            count++;
+        }
+        return count;
     }
 
     /**
@@ -32,7 +54,7 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public void copyTXTFiles(String from, String to) {
-        return;
+
     }
 
     /**
@@ -44,6 +66,13 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public boolean createFile(String path, String name) {
+        File file = new File(Objects.requireNonNull(getClass()
+                .getClassLoader().getResource(path)).getFile() + File.separator + name);
+        try {
+            return file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
@@ -55,6 +84,14 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public String readFileFromResources(String fileName) {
-        return null;
+        String path = Objects.requireNonNull(getClass().getClassLoader()
+                .getResource(fileName)).getPath();
+        String readStr = null;
+        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
+            readStr = reader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return readStr;
     }
 }
