@@ -4,6 +4,7 @@ import com.epam.izh.rd.online.repository.SimpleFileRepository;
 import com.epam.izh.rd.online.service.SimpleBigNumbersService;
 import com.epam.izh.rd.online.service.SimpleDateService;
 import com.epam.izh.rd.online.service.SimpleRegExpService;
+import com.epam.izh.rd.online.service.SimpleTextService;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -31,9 +32,16 @@ public class Main {
 //        System.out.println(simpleDateService.getSecondsInYear(2021));
 //        System.out.println(simpleDateService.getSecondsInYear(2020));
 
-        SimpleRegExpService simpleRegExpService = new SimpleRegExpService();
-        System.out.println(simpleRegExpService.maskSensitiveData());
-        System.out.println(simpleRegExpService.replacePlaceholders(1, 2));
+//        SimpleRegExpService simpleRegExpService = new SimpleRegExpService();
+//        System.out.println(simpleRegExpService.maskSensitiveData());
+//        System.out.println(simpleRegExpService.replacePlaceholders(1, 2));
+
+//        SimpleTextService simpleTextService = new SimpleTextService();
+//        System.out.println(simpleTextService.removeString("Hello, hello, hello, how low?", ", he"));
+//        System.out.println(simpleTextService.isQuestionString("test!"));
+//        System.out.println(simpleTextService.concatenate(new String[]{"a", "b", "c"}));
+//        System.out.println(simpleTextService.toJumpCase("Load Up On Guns And Bring Your Friends"));
+//        System.out.println(simpleTextService.isPalindrome(""));
     }
 
 
