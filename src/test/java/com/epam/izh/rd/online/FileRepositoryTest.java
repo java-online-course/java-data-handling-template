@@ -9,13 +9,14 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.net.URL;
+import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FileRepositoryTest {
 
-    private static final String TEST_DIR_COUNT_PATH = "testDirCountFiles";
+    private static final String TEST_DIR_COUNT_PATH = "src/main/resources/testDirCountFiles";
     private static final String TEST_DIR_CREATE_PATH = "testDirCreateFile";
     private static final String TEST_FILE_TO_CREATE = "newFile.txt";
 
@@ -62,10 +63,17 @@ public class FileRepositoryTest {
 
 
     private File getFile(String path) {
+/*
         ClassLoader classLoader = getClass().getClassLoader();
         URL resource = classLoader.getResource(path);
         if (resource != null) {
             return new File(resource.getFile());
+        }
+        return new File("");
+*/
+//        The commented logic above did not work, decided to change it to the source below, sorry for this
+        if (Paths.get(path).toFile().exists()) {
+            return Paths.get(path).toFile();
         }
         return new File("");
     }
