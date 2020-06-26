@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -50,7 +52,6 @@ public class FileRepositoryTest {
     @DisplayName("Тест метода FileRepository.createFile(String path)")
     void testCreateFile() {
         fileRepository.createFile(TEST_DIR_CREATE_PATH, TEST_FILE_TO_CREATE);
-
         assertTrue(getFile(TEST_DIR_CREATE_PATH + "/" + TEST_FILE_TO_CREATE).exists());
     }
 
@@ -62,11 +63,7 @@ public class FileRepositoryTest {
 
 
     private File getFile(String path) {
-        ClassLoader classLoader = getClass().getClassLoader();
-        URL resource = classLoader.getResource(path);
-        if (resource != null) {
-            return new File(resource.getFile());
-        }
-        return new File("");
+        Path resource = Paths.get(path);
+        return new File(String.valueOf(resource));
     }
 }
