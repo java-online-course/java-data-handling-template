@@ -1,5 +1,10 @@
 package com.epam.izh.rd.online.service;
 
+import java.io.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+
 public class SimpleRegExpService implements RegExpService {
 
     /**
@@ -11,7 +16,28 @@ public class SimpleRegExpService implements RegExpService {
      */
     @Override
     public String maskSensitiveData() {
-        return null;
+
+        String str = "";
+
+        try (InputStream file = this.getClass().getResourceAsStream("/sensitive_data.txt");
+             BufferedReader obj = new BufferedReader(new InputStreamReader(file));) {
+
+            String text = obj.readLine();
+
+            Pattern pat = Pattern.compile("[0-9]{4} ([0-9]{4} [0-9]{4}) [0-9]{4}");
+            Matcher mat = pat.matcher(text);
+
+            while (mat.find()) {
+
+                String num = mat.group(1);
+                text = text.replace(num, "**** ****");
+                str = text;
+            }
+
+        } catch (Exception e) {
+        }
+        return str;
+
     }
 
     /**
@@ -22,6 +48,31 @@ public class SimpleRegExpService implements RegExpService {
      */
     @Override
     public String replacePlaceholders(double paymentAmount, double balance) {
-        return null;
+
+        String str = "";
+
+        try (InputStream file = this.getClass().getResourceAsStream("/sensitive_data.txt");
+             BufferedReader obj = new BufferedReader(new InputStreamReader(file));) {
+
+            String text = obj.readLine();
+
+            Pattern pat = Pattern.compile("(payment.+amount.).+(balance.)");
+            Matcher mat = pat.matcher(text);
+
+            int amount = (int)paymentAmount;
+            int bal = (int)balance;
+
+
+            while (mat.find()) {
+
+                text = text.replaceAll(".."+ mat.group(1), amount+"");
+             str = text.replaceAll(".."+ mat.group(2), bal+"");
+
+            }
+
+        } catch (Exception e) {
+        }
+
+        return str;
     }
 }
