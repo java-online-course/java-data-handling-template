@@ -51,7 +51,14 @@ public class FileRepositoryTest {
     void testCreateFile() {
         fileRepository.createFile(TEST_DIR_CREATE_PATH, TEST_FILE_TO_CREATE);
 
-        assertTrue(getFile(TEST_DIR_CREATE_PATH + "/" + TEST_FILE_TO_CREATE).exists());
+        final File newFile = getFile(TEST_DIR_CREATE_PATH + "/" + TEST_FILE_TO_CREATE);
+        assertTrue(newFile.exists());
+        final File readmeFile = getFile("readme.txt");
+        System.out.println("readmeFile = " + readmeFile.getAbsolutePath());
+        System.out.println("newFile = " + newFile.getAbsolutePath());
+        System.out.println("empty path = " + getFile("").getAbsolutePath());
+        System.out.println("root path = " + getFile("/").getAbsolutePath());
+        System.out.println("dir path = " + getFile(TEST_DIR_COUNT_PATH).getAbsolutePath());
     }
 
     @Test

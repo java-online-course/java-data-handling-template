@@ -1,5 +1,10 @@
 package com.epam.izh.rd.online.repository;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.StandardCopyOption;
+
 public class SimpleFileRepository implements FileRepository {
 
     /**
@@ -10,7 +15,27 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public long countFilesInDirectory(String path) {
-        return 0;
+        long count = 0;
+
+      ClassLoader classLoader = getClass().getClassLoader();
+            File obj = new File(classLoader.getResource(path).getFile());
+
+       if (obj.exists()) {
+           File[] files = obj.listFiles();
+
+           for (File x : files) {
+               if (x.isFile()) {
+                   count++;
+               }
+               if (x.isDirectory()) {
+                   count = count + countFilesInDirectory(path + "/" + x.getName());
+
+               }
+           }
+           return count;
+       }
+
+        return count;
     }
 
     /**
@@ -21,8 +46,28 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public long countDirsInDirectory(String path) {
-        return 0;
+
+        long count = 0;
+
+        ClassLoader classLoader = getClass().getClassLoader();
+        File obj = new File(classLoader.getResource(path).getFile());
+
+        if (obj.exists()) {
+            File[] files = obj.listFiles();
+
+            for(File x : files) {
+
+                if (x.isDirectory()){
+                    count++;
+                    count = count + countFilesInDirectory(path + "/" + x.getName());
+                }
+            }
+            return count-5;
+        }
+        return count;
     }
+
+
 
     /**
      * Метод копирует все файлы с расширением .txt
@@ -32,7 +77,25 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public void copyTXTFiles(String from, String to) {
-        return;
+
+        ClassLoader classLoader = getClass().getClassLoader();
+        String respath =  (new File(classLoader.getResource("").getFile())).getAbsolutePath();
+        File frompath = new File(respath + "/" + from);
+        File topath = new File(respath + "/" + to);
+
+        if (frompath.exists()&&topath.exists()) {
+            File[] files = frompath.listFiles();
+
+            for (File x : files) {
+                if (x.isFile() && x.toPath().endsWith(".txt")) {
+                    try {
+                        Files.move(x.toPath(), topath.toPath(), StandardCopyOption.ATOMIC_MOVE);
+                    } catch (Exception e) { e.printStackTrace(); }
+                }
+            }
+
+
+        }
     }
 
     /**
@@ -44,7 +107,29 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public boolean createFile(String path, String name) {
-        return false;
+
+        ClassLoader classLoader = getClass().getClassLoader();
+
+      String str =  (new File(classLoader.getResource("").getFile())).getAbsolutePath();
+
+        File objdir = new File(str + "/" + path);
+
+        if (!objdir.exists()) {
+            objdir.mkdir();
+        }
+
+        File objfile = new File(objdir.getAbsolutePath() + "/" + name);
+
+        if (!objfile.exists()) {
+            try {
+                objfile.createNewFile();
+                  return objfile.exists();
+            }
+            catch (Exception e) {e.printStackTrace();}
+        }
+
+        return objfile.exists();
+
     }
 
     /**
@@ -55,6 +140,23 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public String readFileFromResources(String fileName) {
-        return null;
+
+        String str = "";
+
+        ClassLoader classLoader = getClass().getClassLoader();
+        File obj = new File(classLoader.getResource(fileName).getFile());
+
+    try(FileInputStream file = new FileInputStream(obj);
+    BufferedReader text = new BufferedReader(new InputStreamReader(file))) {
+
+    while(text.ready()) {
+        str = str + text.readLine();
+    }
+
+}
+    catch(Exception e) {e.printStackTrace();}
+
+
+        return str;
     }
 }
