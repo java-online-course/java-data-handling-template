@@ -3,51 +3,35 @@ package com.epam.izh.rd.online.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.spi.CalendarNameProvider;
 
 public class SimpleDateService implements DateService {
 
-    /**
-     * Метод парсит дату в строку
-     *
-     * @param localDate дата
-     * @return строка с форматом день-месяц-год(01-01-1970)
-     */
     @Override
     public String parseDate(LocalDate localDate) {
-        return null;
+        return localDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     }
 
-    /**
-     * Метод парсит строку в дату
-     *
-     * @param string строка в формате год-месяц-день часы:минуты (1970-01-01 00:00)
-     * @return дата и время
-     */
     @Override
     public LocalDateTime parseString(String string) {
-        return null;
+        return LocalDateTime.parse(string, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
-    /**
-     * Метод конвертирует дату в строку с заданным форматом
-     *
-     * @param localDate исходная дата
-     * @param formatter формат даты
-     * @return полученная строка
-     */
     @Override
     public String convertToCustomFormat(LocalDate localDate, DateTimeFormatter formatter) {
-        return null;
+        return localDate.format(formatter);
     }
 
-    /**
-     * Метод получает следующий високосный год
-     *
-     * @return високосный год
-     */
     @Override
     public long getNextLeapYear() {
-        return 0;
+        long year = 2020;
+        while(!new GregorianCalendar().isLeapYear((int) year)) {
+            year++;
+        }
+        return year;
     }
 
     /**
@@ -57,8 +41,6 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public long getSecondsInYear(int year) {
-        return 0;
+        return new GregorianCalendar().isLeapYear(year) ? 31_622_400 : 31_536_000;
     }
-
-
 }

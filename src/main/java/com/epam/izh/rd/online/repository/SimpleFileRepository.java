@@ -1,27 +1,31 @@
 package com.epam.izh.rd.online.repository;
 
-public class SimpleFileRepository implements FileRepository {
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
-    /**
-     * Метод рекурсивно подсчитывает количество файлов в директории
-     *
-     * @param path путь до директори
-     * @return файлов, в том числе скрытых
-     */
+public class SimpleFileRepository implements FileRepository {
+    private long countFiles = 0;
+    private long countDirs = 0;
+    private String whatShouldBeConsidered;
+    private String FILE_PATH = "C:\\Users\\37529\\Desktop\\EPAM-Tranning\\WorkWithData\\java-data-handling-template\\src\\main\\resources\\";
+
     @Override
-    public long countFilesInDirectory(String path) {
-        return 0;
+    public long countFilesInDirectory(String path) throws IOException {
+        whatShouldBeConsidered = "Files";
+        countFiles = 0;
+        return countDirsOrFiles(FILE_PATH + path);
     }
 
-    /**
-     * Метод рекурсивно подсчитывает количество папок в директории, считая корень
-     *
-     * @param path путь до директории
-     * @return число папок
-     */
     @Override
     public long countDirsInDirectory(String path) {
-        return 0;
+        whatShouldBeConsidered = "Dirs";
+        countDirs = 0;
+        return countDirsOrFiles(FILE_PATH + path);
     }
 
     /**
@@ -32,19 +36,14 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public void copyTXTFiles(String from, String to) {
-        return;
+
     }
 
-    /**
-     * Метод создает файл на диске с расширением txt
-     *
-     * @param path путь до нового файла
-     * @param name имя файла
-     * @return был ли создан файл
-     */
     @Override
-    public boolean createFile(String path, String name) {
-        return false;
+    public boolean createFile(String path, String name) throws IOException {
+        return new File(path + "/" + name).createNewFile(); // Тест какой-то неправильный. Пробовал и вот так,
+                                                                        // тогда файл создаётся от корня, и в папке resources. Файл создаётся,
+                                                                        // но тест не проходит
     }
 
     /**
@@ -54,7 +53,29 @@ public class SimpleFileRepository implements FileRepository {
      * @return контент
      */
     @Override
-    public String readFileFromResources(String fileName) {
-        return null;
+    public String readFileFromResources(String fileName) throws IOException {
+        byte[] allBytesInFile = new FileInputStream("src/main/resources/" + fileName).readAllBytes();
+        StringBuilder stringInFile = new StringBuilder();
+        for (byte byteInArrayBytes : allBytesInFile) {
+            stringInFile.append((char) byteInArrayBytes);
+        }
+        return stringInFile.toString();
+    }
+
+    private long countDirsOrFiles(String path) {
+        File[] files = new File(path).listFiles();
+        for (File file : Objects.requireNonNull(files)) {
+            if(!file.isDirectory())
+                countFiles++;
+            else
+                if(file.isDirectory()) {
+                    countDirs++;
+                    countDirsOrFiles(String.valueOf(file));
+                }
+        }
+        if(whatShouldBeConsidered.equals("Dirs"))
+            return countDirs + 1;
+        else
+            return countFiles;
     }
 }
