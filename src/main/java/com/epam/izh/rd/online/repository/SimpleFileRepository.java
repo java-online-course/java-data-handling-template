@@ -1,5 +1,14 @@
 package com.epam.izh.rd.online.repository;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+
 public class SimpleFileRepository implements FileRepository {
 
     /**
@@ -10,7 +19,25 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public long countFilesInDirectory(String path) {
-        return 0;
+        if (path.length() < "src/main/resources/".length()) {
+            path = "src/main/resources/" + path;
+        }
+
+        File file = new File(path);
+        File[] directory = file.listFiles();
+
+        long count = 0;
+
+        if (directory != null) {
+            for (File item : directory) {
+                if (!item.isFile()) {
+                    count += countFilesInDirectory(item.getPath());
+                } else {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 
     /**
@@ -21,7 +48,25 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public long countDirsInDirectory(String path) {
-        return 0;
+        long count = 0;
+        if (path.length() < "src/main/resources/".length()) {
+            path = "src/main/resources/" + path;
+            count++;
+        }
+
+        File file = new File(path);
+        File[] directory = file.listFiles();
+
+
+        if (directory != null) {
+            for (File item : directory) {
+                if (item.isDirectory()) {
+                    count++;
+                    count += countDirsInDirectory(item.getPath());
+                }
+            }
+        }
+        return count;
     }
 
     /**
@@ -32,7 +77,22 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public void copyTXTFiles(String from, String to) {
-        return;
+        File folder = new File(from);
+
+        File[] listOfFiles = folder.listFiles();
+
+        Path destDir = Paths.get(to);
+        if (listOfFiles != null) {
+            for (File file : listOfFiles) {
+                try {
+                    if (file.getAbsolutePath().endsWith(".txt")) {
+                        Files.copy(file.toPath(), destDir.resolve(file.getName()), StandardCopyOption.REPLACE_EXISTING);
+                    }
+                } catch (IOException ioex) {
+                    ioex.printStackTrace();
+                }
+            }
+        }
     }
 
     /**
@@ -44,6 +104,21 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public boolean createFile(String path, String name) {
+        if (path.length() < "src/main/resources/".length()) {
+            path = "src/main/resources/" + path;
+        }
+
+        File folder = new File(path);
+        if (!folder.exists()) {
+            folder.mkdir();
+        }
+
+        File file = new File(path + "/" + name);
+        try {
+            return file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
@@ -55,6 +130,15 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public String readFileFromResources(String fileName) {
-        return null;
+        StringBuilder stringBuilder = new StringBuilder();
+        try (BufferedReader is = new BufferedReader(new FileReader("src/main/resources/" + fileName))) {
+            String line;
+            while ((line = is.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+        } catch (IOException ioex) {
+            ioex.printStackTrace();
+        }
+        return stringBuilder.toString();
     }
 }
