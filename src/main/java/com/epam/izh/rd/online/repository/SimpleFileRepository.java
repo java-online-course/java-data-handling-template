@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,11 +20,12 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public long countFilesInDirectory(String path) {
-        if (path.length() < "src/main/resources/".length()) {
-            path = "src/main/resources/" + path;
-        }
-
         File file = new File(path);
+        if (!(file.isDirectory() || file.isFile()))
+        {
+            URL url = getClass().getResource("/" + path);
+            file = new File(url.getPath());
+        }
         File[] directory = file.listFiles();
 
         long count = 0;
@@ -49,12 +51,15 @@ public class SimpleFileRepository implements FileRepository {
     @Override
     public long countDirsInDirectory(String path) {
         long count = 0;
-        if (path.length() < "src/main/resources/".length()) {
-            path = "src/main/resources/" + path;
+
+        File file = new File(path);
+        if (!(file.isDirectory() || file.isFile()))
+        {
+            URL url = getClass().getResource("/" + path);
+            file = new File(url.getPath());
             count++;
         }
 
-        File file = new File(path);
         File[] directory = file.listFiles();
 
 
@@ -104,16 +109,13 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public boolean createFile(String path, String name) {
-        if (path.length() < "src/main/resources/".length()) {
-            path = "src/main/resources/" + path;
-        }
-
-        File folder = new File(path);
+        URL url = getClass().getResource("/");
+        File folder = new File(url.getPath() + "/" + path);
         if (!folder.exists()) {
             folder.mkdir();
         }
 
-        File file = new File(path + "/" + name);
+        File file = new File(folder.getPath() + "/" + name);
         try {
             return file.createNewFile();
         } catch (IOException e) {

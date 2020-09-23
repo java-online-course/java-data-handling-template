@@ -1,10 +1,6 @@
 package com.epam.izh.rd.online.service;
 
 import com.epam.izh.rd.online.repository.SimpleFileRepository;
-import com.sun.xml.internal.ws.commons.xmlutil.Converter;
-import sun.plugin2.message.Conversation;
-
-import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

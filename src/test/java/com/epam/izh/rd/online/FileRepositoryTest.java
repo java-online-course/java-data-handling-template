@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class FileRepositoryTest {
 
     private static final String TEST_DIR_COUNT_PATH = "testDirCountFiles";
-    private static final String TEST_DIR_CREATE_PATH = "src/main/resources/testDirCreateFile";
+    private static final String TEST_DIR_CREATE_PATH = "testDirCreateFile";
     private static final String TEST_FILE_TO_CREATE = "newFile.txt";
 
     private static FileRepository fileRepository;
@@ -50,6 +50,7 @@ public class FileRepositoryTest {
     @DisplayName("Тест метода FileRepository.createFile(String path)")
     void testCreateFile() {
         fileRepository.createFile(TEST_DIR_CREATE_PATH, TEST_FILE_TO_CREATE);
+
         assertTrue(getFile(TEST_DIR_CREATE_PATH + "/" + TEST_FILE_TO_CREATE).exists());
     }
 
@@ -61,7 +62,11 @@ public class FileRepositoryTest {
 
 
     private File getFile(String path) {
-        File file = new File(path);
-        return file;
+        ClassLoader classLoader = getClass().getClassLoader();
+        URL resource = classLoader.getResource(path);
+        if (resource != null) {
+            return new File(resource.getFile());
+        }
+        return new File("");
     }
 }

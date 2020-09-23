@@ -24,7 +24,7 @@ class SieveEratosthenes {
         primes.add(new PrimePair(new BigInteger("3"), new BigInteger("3")));
     }
 
-    public BigInteger fillNPrimes(int n) {
+    BigInteger fillNPrimes(int n) {
         if (n >= 0 && n <= 1) {
             return primes.get(n).prime;
         }
