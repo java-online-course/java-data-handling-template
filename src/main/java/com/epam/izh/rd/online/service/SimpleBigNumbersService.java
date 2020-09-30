@@ -3,6 +3,8 @@ package com.epam.izh.rd.online.service;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import static java.math.BigDecimal.ROUND_DOWN;
+
 public class SimpleBigNumbersService implements BigNumbersService {
 
     /**
@@ -13,7 +15,9 @@ public class SimpleBigNumbersService implements BigNumbersService {
      */
     @Override
     public BigDecimal getPrecisionNumber(int a, int b, int range) {
-        return null;
+        BigDecimal devidend = BigDecimal.valueOf(a);
+        BigDecimal devider = BigDecimal.valueOf(b);
+        return devidend.divide(devider, range, ROUND_DOWN);
     }
 
     /**
@@ -24,6 +28,10 @@ public class SimpleBigNumbersService implements BigNumbersService {
      */
     @Override
     public BigInteger getPrimaryNumber(int range) {
-        return null;
+        BigInteger prime = BigInteger.valueOf(2);
+        for(int i = 0; i < range; i++) {
+            prime = prime.nextProbablePrime();
+        }
+        return prime;
     }
 }
