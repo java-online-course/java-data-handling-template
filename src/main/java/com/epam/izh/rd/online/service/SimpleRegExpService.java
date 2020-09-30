@@ -1,5 +1,12 @@
 package com.epam.izh.rd.online.service;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class SimpleRegExpService implements RegExpService {
 
     /**
@@ -11,7 +18,24 @@ public class SimpleRegExpService implements RegExpService {
      */
     @Override
     public String maskSensitiveData() {
-        return null;
+        StringBuilder sb  = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new FileReader("src\\main\\resources\\sensitive_data.txt"))) {
+            while (reader.ready()){
+                sb.append(reader.readLine());
+            }
+
+            Pattern pattern = Pattern.compile(" [\\d]{4} [\\d]{4} [\\d]{4} [\\d]{4} ");
+            Matcher matcher = pattern.matcher(sb.toString());
+            while (matcher.find()){
+                int startIndex = matcher.start();
+                sb.replace(startIndex + 6, startIndex + 15, "**** ****");
+            }
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return sb.toString();
     }
 
     /**
@@ -22,6 +46,15 @@ public class SimpleRegExpService implements RegExpService {
      */
     @Override
     public String replacePlaceholders(double paymentAmount, double balance) {
-        return null;
+        StringBuilder sb =  new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new FileReader("src\\main\\resources\\sensitive_data.txt"))) {
+            while (reader.ready()){
+                String str =reader.readLine().replaceAll("\\$\\{payment_amount}", String.valueOf((int)(paymentAmount)) );
+                sb.append(str.replaceAll("\\$\\{balance}", String.valueOf((int)balance)));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return sb.toString();
     }
 }
