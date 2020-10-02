@@ -1,5 +1,7 @@
 package com.epam.izh.rd.online.service;
 
+import java.util.stream.IntStream;
+
 public class SimpleTextService implements TextService {
 
     /**
@@ -13,7 +15,7 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String removeString(String base, String remove) {
-        return null; //TODO
+        return base.replace(remove, "");
     }
 
     /**
@@ -24,7 +26,7 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public boolean isQuestionString(String text) {
-        return false; //TODO
+        return text.endsWith("?");
     }
 
     /**
@@ -35,7 +37,11 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String concatenate(String... elements) {
-        return null; //TODO
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String element : elements) {
+            stringBuilder.append(element);
+        }
+        return stringBuilder.toString();
     }
 
     /**
@@ -47,7 +53,12 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String toJumpCase(String text) {
-        return null; //TODO
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < text.length(); i= i + 2 ) {
+            stringBuilder.append(text.substring(i,i + 1).toLowerCase());
+            stringBuilder.append(text.substring(i + 1,i + 2).toUpperCase());
+        }
+        return stringBuilder.toString();
     }
 
     /**
@@ -59,6 +70,10 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public boolean isPalindrome(String string) {
-       return false; //TODO
+        if (string.isEmpty()) {
+            return false;
+        }
+        StringBuilder stringBuilder = new StringBuilder(string.replaceAll("\\s",""));
+        return string.replaceAll("\\s","").equalsIgnoreCase(stringBuilder.reverse().toString().trim());
     }
 }
