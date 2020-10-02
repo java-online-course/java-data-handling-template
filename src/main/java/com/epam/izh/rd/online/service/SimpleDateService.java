@@ -3,9 +3,9 @@ package com.epam.izh.rd.online.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 
 public class SimpleDateService implements DateService {
-
     /**
      * Метод парсит дату в строку
      *
@@ -14,7 +14,8 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public String parseDate(LocalDate localDate) {
-        return null;
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        return localDate.format(dateTimeFormatter);
     }
 
     /**
@@ -25,7 +26,8 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public LocalDateTime parseString(String string) {
-        return null;
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        return LocalDateTime.parse(string, dateTimeFormatter);
     }
 
     /**
@@ -37,7 +39,7 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public String convertToCustomFormat(LocalDate localDate, DateTimeFormatter formatter) {
-        return null;
+        return localDate.format(formatter);
     }
 
     /**
@@ -47,7 +49,11 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public long getNextLeapYear() {
-        return 0;
+        LocalDate localDate = LocalDate.now();
+        while (!localDate.isLeapYear()) {
+            localDate.plusYears(1L);
+        }
+        return localDate.getYear();
     }
 
     /**
@@ -57,7 +63,8 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public long getSecondsInYear(int year) {
-        return 0;
+        long numberOfDays = LocalDate.of(year, 1, 1).isLeapYear() ? 366L : 365L;
+        return 60L * 60L * 24L * numberOfDays;
     }
 
 
