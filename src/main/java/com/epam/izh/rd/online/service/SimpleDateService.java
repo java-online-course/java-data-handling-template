@@ -1,8 +1,12 @@
 package com.epam.izh.rd.online.service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class SimpleDateService implements DateService {
 
@@ -14,7 +18,9 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public String parseDate(LocalDate localDate) {
-        return null;
+
+        String parse = localDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        return parse;
     }
 
     /**
@@ -25,7 +31,8 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public LocalDateTime parseString(String string) {
-        return null;
+        LocalDateTime parse = LocalDateTime.parse(string, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        return parse;
     }
 
     /**
@@ -37,7 +44,8 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public String convertToCustomFormat(LocalDate localDate, DateTimeFormatter formatter) {
-        return null;
+        String convert = localDate.format(formatter);
+        return convert;
     }
 
     /**
@@ -47,7 +55,13 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public long getNextLeapYear() {
-        return 0;
+        GregorianCalendar calendar = new GregorianCalendar();
+        int year = calendar.get(Calendar.YEAR);
+        year+=1;
+        while (true != calendar.isLeapYear(year)) {
+            year++;
+        }
+        return (long)year;
     }
 
     /**
@@ -57,7 +71,12 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public long getSecondsInYear(int year) {
-        return 0;
+        GregorianCalendar calendar = new GregorianCalendar();
+        long rez;
+        if(calendar.isLeapYear(year)== true) {
+          rez = 31622400;
+        }else rez = 31536000;
+        return rez;
     }
 
 

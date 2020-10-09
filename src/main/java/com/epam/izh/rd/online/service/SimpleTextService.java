@@ -1,5 +1,11 @@
 package com.epam.izh.rd.online.service;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+
 public class SimpleTextService implements TextService {
 
     /**
@@ -13,7 +19,9 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String removeString(String base, String remove) {
-        return null; //TODO
+        String rez = base.replaceAll(remove,"");
+        return rez;
+
     }
 
     /**
@@ -24,6 +32,9 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public boolean isQuestionString(String text) {
+        if (text.endsWith("?")){
+            return true;
+        }
         return false; //TODO
     }
 
@@ -35,7 +46,13 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String concatenate(String... elements) {
-        return null; //TODO
+        String[] str = elements;
+        String rez= "";
+        for (int i = 0; i < str.length; i++) {
+            rez = rez + str[i];
+        }
+        return rez;
+        //TODO
     }
 
     /**
@@ -47,7 +64,18 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String toJumpCase(String text) {
-        return null; //TODO
+        char[] arrTemp = text.toCharArray();
+        for (int i = 0; i < arrTemp.length; i+=2) {
+            arrTemp[i] = Character.toLowerCase(arrTemp[i]);
+        }
+        for (int i = 1; i < arrTemp.length; i+=2) {
+            arrTemp[i] = Character.toUpperCase(arrTemp[i]);
+        }
+
+        String s = new String(arrTemp);
+
+        return s;
+         //TODO
     }
 
     /**
@@ -59,6 +87,17 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public boolean isPalindrome(String string) {
-       return false; //TODO
+        if (string.length()<=1){
+            return false;
+        }
+        StringBuilder sb = new StringBuilder();
+        String strEtalon = string.replaceAll("\\s","").toLowerCase();
+        sb.append(strEtalon).reverse();
+        String strBild = sb.toString();
+        if (strEtalon.equals(strBild)){
+            return true;
+        }else return false;
+
+       //TODO
     }
 }
