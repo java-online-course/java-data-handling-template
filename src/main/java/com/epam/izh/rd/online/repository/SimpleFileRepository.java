@@ -15,7 +15,7 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public long countFilesInDirectory(String path) {
-        Path p = (Path) Paths.get(path);
+      File f = new File(path);
         return 0;
     }
 
