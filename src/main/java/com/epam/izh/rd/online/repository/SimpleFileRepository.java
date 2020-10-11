@@ -1,9 +1,11 @@
 package com.epam.izh.rd.online.repository;
 
-import javafx.scene.shape.Path;
-
-import java.io.File;
+import java.io.*;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 public class SimpleFileRepository implements FileRepository {
 
@@ -15,8 +17,26 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public long countFilesInDirectory(String path) {
-      File f = new File(path);
-        return 0;
+        File file = new File(path);
+        if (!(file.isDirectory() || file.isFile())) {
+            URL url = getClass().getResource("/" + path);
+            file = new File(url.getPath());
+        }
+        File[] directory = file.listFiles();
+
+        long count = 0;
+
+        if (directory != null) {
+            for (File item : directory) {
+                if (!item.isFile()) {
+                    count += countFilesInDirectory(item.getPath());
+                } else {
+                    count++;
+                }
+            }
+        }
+        return count;
+
     }
 
     /**
@@ -27,7 +47,26 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public long countDirsInDirectory(String path) {
-        return 0;
+        long count = 0;
+        File file = new File(path);
+        if (!(file.isDirectory() || file.isFile())) {
+            URL url = getClass().getResource("/" + path);
+            file = new File(url.getPath());
+            count++;
+        }
+
+        File[] directory = file.listFiles();
+
+
+        if (directory != null) {
+            for (File item : directory) {
+                if (item.isDirectory()) {
+                    count++;
+                    count += countDirsInDirectory(item.getPath());
+                }
+            }
+        }
+        return count;
     }
 
     /**
@@ -38,8 +77,25 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public void copyTXTFiles(String from, String to) {
-        return;
+        File dir = new File(from);
+        if(dir.getName().endsWith(".txt")) {
+            try(BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(from))) ;
+                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(new File(to)))) {
+                String line;
+                while((line = bufferedReader.readLine())!=null) {
+                    bufferedWriter.write(line, 0, line.length());
+                    bufferedWriter.newLine();
+                }
+            } catch(FileNotFoundException ex){
+                ex.printStackTrace();
+            } catch(IOException ex){
+                ex.printStackTrace();
+            }
+        }
+
     }
+
+
 
     /**
      * Метод создает файл на диске с расширением txt
@@ -50,8 +106,21 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public boolean createFile(String path, String name) {
+        URL url = getClass().getResource("/");
+        File folder = new File(url.getPath() + "/" + path);
+        if (!folder.exists()) {
+            folder.mkdir();
+        }
+
+        File file = new File(folder.getPath() + "/" + name);
+        try {
+            return file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return false;
     }
+
 
     /**
      * Метод считывает тело файла .txt из папки src/main/resources
@@ -61,6 +130,16 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public String readFileFromResources(String fileName) {
+        File file = new File("src/main/resources/"+fileName);
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String str = br.readLine();
+            return str;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 }
