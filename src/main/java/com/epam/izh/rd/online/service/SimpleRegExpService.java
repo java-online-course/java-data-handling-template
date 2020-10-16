@@ -1,5 +1,11 @@
 package com.epam.izh.rd.online.service;
 
+import java.io.*;
+import java.sql.SQLOutput;
+import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class SimpleRegExpService implements RegExpService {
 
     /**
@@ -11,6 +17,26 @@ public class SimpleRegExpService implements RegExpService {
      */
     @Override
     public String maskSensitiveData() {
+        try (FileReader reader = new FileReader("src/main/resources/sensitive_data.txt")){
+            int symbol = reader.read();
+            char[]buffer = new char [169];
+            reader.read(buffer);
+            String valueOfchar = String.valueOf(buffer);
+            valueOfchar = valueOfchar.replace ("        ", "");
+            String line1 = valueOfchar;
+            Pattern pat = Pattern.compile("(\\d\\s\\d{1,4}\\s\\d{1,4})\\s");
+            Matcher mat = pat.matcher(line1);
+            line1 = mat.replaceAll("$1 **** **** ");
+            Pattern pat1 = Pattern.compile("(\\d{1,4}\\s\\d{1,4})\\s\\D");
+            Matcher mat1 = pat1.matcher(line1);
+            line1 = mat1.replaceAll("*");
+            return line1;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return null;
     }
 
@@ -22,6 +48,28 @@ public class SimpleRegExpService implements RegExpService {
      */
     @Override
     public String replacePlaceholders(double paymentAmount, double balance) {
-        return null;
+        try (FileReader reader = new FileReader("src/main/resources/sensitive_data.txt")){
+            int symbol = reader.read();
+            char[]buffer = new char [169];
+            reader.read(buffer);
+            String valueOfchar = String.valueOf(buffer);
+            double d = paymentAmount;
+            int i = (int) d;
+            double d1 = balance;
+            int i1 = (int) d1;
+            String paymentAmount1 = String.valueOf(i);
+            String balance1 = String.valueOf(i1);
+            valueOfchar = valueOfchar.replace ("${payment_amount}", paymentAmount1);
+            valueOfchar = valueOfchar.replace ("${balance}", balance1);
+            return valueOfchar;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
+
 }
