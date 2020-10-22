@@ -79,11 +79,11 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public boolean createFile(String path, String name) {
-        File file = new File(path);
-        File filePath = new File(file.getAbsolutePath());
-        if(!filePath.exists()){
-            file.mkdirs();
+        File directory = new File(getClass().getResource("/" + path).getPath());
+        if (!directory.exists()) {
+            directory.mkdirs();
         }
+        File file = new File(directory.getPath() + "/" + name);
         try {
             return file.createNewFile();
         } catch (IOException e) {
@@ -91,7 +91,6 @@ public class SimpleFileRepository implements FileRepository {
         }
         return false;
     }
-
 
     /**
      * Метод считывает тело файла .txt из папки src/main/resources
@@ -103,7 +102,7 @@ public class SimpleFileRepository implements FileRepository {
     public String readFileFromResources(String fileName) {
         StringBuilder textFromFile = new StringBuilder();
         try (BufferedReader bufferedReader = new BufferedReader(
-                new FileReader("src/main/resources/" + fileName))) {
+                new FileReader(getClass().getResource("/" + fileName).getPath()))) {
             String line = bufferedReader.readLine();
             while (line != null) {
                 textFromFile.append(line);
@@ -114,4 +113,5 @@ public class SimpleFileRepository implements FileRepository {
         }
         return textFromFile.toString();
     }
+
 }
