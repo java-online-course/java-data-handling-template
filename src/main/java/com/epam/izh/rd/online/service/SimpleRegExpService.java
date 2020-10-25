@@ -1,5 +1,9 @@
 package com.epam.izh.rd.online.service;
 
+import com.epam.izh.rd.online.repository.SimpleFileRepository;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class SimpleRegExpService implements RegExpService {
 
     /**
@@ -11,7 +15,16 @@ public class SimpleRegExpService implements RegExpService {
      */
     @Override
     public String maskSensitiveData() {
-        return null;
+        StringBuilder stringBuilder = new StringBuilder(
+                new SimpleFileRepository().readFileFromResources("sensitive_data.txt")
+        );
+
+        Pattern pattern = Pattern.compile("((\\d){4}\\s?){4}");
+        Matcher matcher = pattern.matcher(stringBuilder.toString());
+        while (matcher.find()) {
+            stringBuilder.replace(matcher.start() + 4, matcher.end() - 5, " **** **** ");
+        }
+        return stringBuilder.toString();
     }
 
     /**
@@ -22,6 +35,23 @@ public class SimpleRegExpService implements RegExpService {
      */
     @Override
     public String replacePlaceholders(double paymentAmount, double balance) {
-        return null;
+        StringBuilder stringBuilder = new StringBuilder(
+                new SimpleFileRepository().readFileFromResources("sensitive_data.txt")
+        );
+
+        Pattern pattern = Pattern.compile("[$][{]{1}\\w+[}]{1}");
+        Matcher matcher = pattern.matcher(stringBuilder.toString());
+
+        while (matcher.find()) {
+            if (stringBuilder.substring(matcher.start() + 2, matcher.end() - 1).equals("payment_amount")) {
+                stringBuilder.replace(matcher.start(), matcher.end(), String.format("%.0f", paymentAmount));
+                matcher = pattern.matcher(stringBuilder.toString());
+            } else if (stringBuilder.substring(matcher.start() + 2, matcher.end() - 1).equals("balance")) {
+                stringBuilder.replace(matcher.start(), matcher.end(), String.format("%.0f", balance));
+                matcher = pattern.matcher(stringBuilder.toString());
+            }
+        }
+        return stringBuilder.toString();
     }
+
 }

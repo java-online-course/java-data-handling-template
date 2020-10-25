@@ -21,7 +21,7 @@ public class RegExpServiceTest {
     @DisplayName("Тест метода RegExpService.maskSensitiveData()")
     void testMaskSensitiveData() {
         assertEquals("Вчера вечером со счета номер 4301 **** **** 2140 был совершен перевод на счет 5042 **** ****" +
-                " 2043 в размере ${payment_amount} рублей. На счету осталось ${balance} рублей",
+                        " 2043 в размере ${payment_amount} рублей. На счету осталось ${balance} рублей",
                 regExpService.maskSensitiveData());
     }
 

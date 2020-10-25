@@ -32,5 +32,13 @@ public class BigNumbersServiceTest {
     void testGetPrimaryNumber() {
         assertEquals(BigInteger.valueOf(547), bigNumbersService.getPrimaryNumber(100),
                 "Для вызова метода: bigNumbersService.getPrimaryNumber(100)");
+        assertEquals(BigInteger.valueOf(2), bigNumbersService.getPrimaryNumber(0),
+                "Для вызова метода: bigNumbersService.getPrimaryNumber(100)");
+        assertEquals(BigInteger.valueOf(3), bigNumbersService.getPrimaryNumber(1),
+                "Для вызова метода: bigNumbersService.getPrimaryNumber(100)");
+        assertEquals(BigInteger.valueOf(5), bigNumbersService.getPrimaryNumber(2),
+                "Для вызова метода: bigNumbersService.getPrimaryNumber(100)");
+        assertEquals(BigInteger.valueOf(7), bigNumbersService.getPrimaryNumber(3),
+                "Для вызова метода: bigNumbersService.getPrimaryNumber(100)");
     }
 }
