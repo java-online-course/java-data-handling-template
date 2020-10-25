@@ -54,10 +54,10 @@ public class SimpleDateService implements DateService {
         GregorianCalendar calendar = (GregorianCalendar) GregorianCalendar.getInstance();
         int leapYear = calendar.get(GregorianCalendar.YEAR);
         for (; ; ) {
+            leapYear++;
             if (calendar.isLeapYear(leapYear)) {
                 return leapYear;
             }
-            leapYear++;
         }
     }
 

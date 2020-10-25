@@ -82,23 +82,16 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public void copyTXTFiles(String from, String to) {
-        File folder = new File(from);
+        File file = new File(to);
+        createFile(file.getParent(), file.getName());
 
-        File[] listOfFiles = folder.listFiles();
-
-        Path destDir = Paths.get(to);
-        if (listOfFiles != null) {
-            for (File file : listOfFiles) {
-                try {
-                    if (file.getAbsolutePath().endsWith(".txt")) {
-                        Files.copy(file.toPath(), destDir.resolve(file.getName()), StandardCopyOption.REPLACE_EXISTING);
-                    }
-                } catch (IOException ioex) {
-                    ioex.printStackTrace();
-                }
-            }
+        try {
+            Files.copy(Paths.get(from), Paths.get(to), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ioEx) {
+            ioEx.printStackTrace();
         }
     }
+
 
     /**
      * Метод создает файл на диске с расширением txt
@@ -111,12 +104,14 @@ public class SimpleFileRepository implements FileRepository {
     public boolean createFile(String path, String name) {
         URL url = getClass().getResource("/");
         File folder = new File(url.getPath() + "/" + path);
-        if (!folder.exists()) {
-            folder.mkdir();
-        }
 
         File file = new File(folder.getPath() + "/" + name);
+        boolean isDirectoryCreated = !new File(path).isDirectory();
+
         try {
+            if (isDirectoryCreated) {
+                Files.createDirectory(Paths.get(path));
+            }
             return file.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
