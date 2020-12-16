@@ -1,5 +1,8 @@
 package com.epam.izh.rd.online.service;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class SimpleTextService implements TextService {
 
     /**
@@ -13,7 +16,13 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String removeString(String base, String remove) {
-        return null; //TODO
+        String rez;
+        Pattern pattern = Pattern.compile(remove);
+        Matcher matcher = pattern.matcher(base);
+
+        rez=matcher.replaceAll("");
+        System.out.print(rez);
+        return rez;
     }
 
     /**
@@ -24,7 +33,12 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public boolean isQuestionString(String text) {
-        return false; //TODO
+        Pattern pattern = Pattern.compile("\\?$");
+        Matcher matcher = pattern.matcher(text);
+        if(matcher.find()){
+           return true;
+        }
+        return false;
     }
 
     /**
@@ -35,7 +49,11 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String concatenate(String... elements) {
-        return null; //TODO
+        String string="";
+        for (String s:elements){
+            string=string+s;
+        }
+        return string;
     }
 
     /**
@@ -47,7 +65,13 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String toJumpCase(String text) {
-        return null; //TODO
+        String rez="";
+        for(int i=0; i<text.length(); i+=2){
+            rez=rez+Character.toLowerCase(text.charAt(i));
+            rez=rez+Character.toUpperCase(text.charAt(i+1));
+        }
+        System.out.print(rez);
+        return rez;
     }
 
     /**
@@ -59,6 +83,26 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public boolean isPalindrome(String string) {
-       return false; //TODO
+        Pattern pattern = Pattern.compile(" ");
+        Matcher matcher = pattern.matcher(string);
+        String rez="";
+        rez=matcher.replaceAll("");
+        String s="";
+        for(int i=0; i<rez.length(); i++){
+            s=s+Character.toLowerCase(rez.charAt(i));
+        }
+        System.out.print(rez);
+        boolean f=false;
+        int j=s.length()-1;
+        for (int i=0; i<rez.length()/2; i++){
+            if(s.charAt(i)!=s.charAt(j)){
+                f=false;
+                break;
+            }
+            f=true;
+            j--;
+        }
+
+       return f;
     }
 }

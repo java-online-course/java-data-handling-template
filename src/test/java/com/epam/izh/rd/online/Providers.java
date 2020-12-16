@@ -22,7 +22,7 @@ public class Providers {
 
     public static Stream<Arguments> testIsQuestionStringProvider() {
         return Stream.of(
-                arguments("Hello, hello, hello, how low?", true),
+                arguments("Hello, hello, hello,? how low", false),
                 arguments("Hello, hello, hello!", false),
                 arguments("", false)
         );

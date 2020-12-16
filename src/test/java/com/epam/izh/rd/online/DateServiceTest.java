@@ -65,5 +65,4 @@ public class DateServiceTest {
         assertEquals(31622400, dateService.getSecondsInYear(2020),
                 "Для вызова метода: dateService.getSecondsInYear(2020)");
     }
-
 }
