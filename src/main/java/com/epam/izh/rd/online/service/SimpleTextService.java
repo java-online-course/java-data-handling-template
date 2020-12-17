@@ -1,5 +1,8 @@
 package com.epam.izh.rd.online.service;
 
+import java.lang.*;
+
+
 public class SimpleTextService implements TextService {
 
     /**
@@ -13,7 +16,10 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String removeString(String base, String remove) {
-        return null; //TODO
+
+            base = base.replace (remove, "");
+
+        return base;
     }
 
     /**
@@ -24,7 +30,8 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public boolean isQuestionString(String text) {
-        return false; //TODO
+
+        return text.endsWith("?");
     }
 
     /**
@@ -35,7 +42,13 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String concatenate(String... elements) {
-        return null; //TODO
+        String[] str = elements;
+        StringBuilder newStr = new StringBuilder();
+        for (int i = 0; i < str.length; i++) {
+            newStr = newStr.append(str[i]);
+        }
+        System.out.println(newStr.toString());
+        return newStr.toString();
     }
 
     /**
@@ -47,7 +60,23 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String toJumpCase(String text) {
-        return null; //TODO
+        char[] chArray = text.toCharArray();
+        for(int i = 0; i<chArray.length; i++){
+            if((i+2) % 2 == 0){
+                String str= Character.toString(chArray[i]);
+                str = str.toLowerCase();
+                char[] chArrayTemp = str.toCharArray();
+                chArray[i] = chArrayTemp[0];
+            }
+            else{
+                String str= Character.toString(chArray[i]);
+                str = str.toUpperCase();
+                char[] chArrayTemp = str.toCharArray();
+                chArray[i] = chArrayTemp[0];
+            }
+        }
+        String charToString = new String(chArray);
+        return charToString;
     }
 
     /**
@@ -59,6 +88,19 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public boolean isPalindrome(String string) {
-       return false; //TODO
+        boolean result;
+        if (string.equals("")){
+            result = false;
+        }
+        else{
+            string = string.toLowerCase().replace(" ", "");
+            StringBuilder sb = new StringBuilder(string);
+            sb = sb.reverse();
+            if (string.equals(sb.toString())){
+                result = true;
+            }
+            else result = false;
+        }
+       return result; //TODO
     }
 }
