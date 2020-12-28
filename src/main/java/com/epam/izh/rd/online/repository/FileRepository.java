@@ -1,5 +1,7 @@
 package com.epam.izh.rd.online.repository;
 
+import java.io.IOException;
+
 public interface FileRepository {
 
 
