@@ -1,5 +1,13 @@
 package com.epam.izh.rd.online.repository;
 
+import java.io.*;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+
 public class SimpleFileRepository implements FileRepository {
 
     /**
@@ -10,7 +18,32 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public long countFilesInDirectory(String path) {
-        return 0;
+
+        Path pathResult = Paths.get(path);
+        if (!pathResult.isAbsolute()) {
+
+            URL url = getClass().getClassLoader().getResource(path);
+            try {
+                assert url != null;
+                Path pathAbsolut = Paths.get(url.toURI());
+                path = pathAbsolut.toString();
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+        }
+
+        File dir = new File(path);
+        long countFiles = 0;
+        if (dir.exists() && dir.isDirectory()) {
+            for (File innerDir: dir.listFiles()) {
+                if (innerDir.isFile()) {
+                    countFiles++;
+                } else {
+                    countFiles += new SimpleFileRepository().countFilesInDirectory(innerDir.getPath());
+                }
+            }
+        }
+        return countFiles;
     }
 
     /**
@@ -21,7 +54,30 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public long countDirsInDirectory(String path) {
-        return 0;
+
+        Path pathResult = Paths.get(path);
+        if (!pathResult.isAbsolute()) {
+
+            URL url = getClass().getClassLoader().getResource(path);
+            try {
+                assert url != null;
+                Path pathAbsolut = Paths.get(url.toURI());
+                path = pathAbsolut.toString();
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+        }
+
+        File dir = new File(path);
+        long countDirs = 1;
+        if (dir.exists() && dir.isDirectory()) {
+            for (File innerDir: dir.listFiles()) {
+                if (innerDir.isDirectory()) {
+                    countDirs += new SimpleFileRepository().countDirsInDirectory(innerDir.getPath());
+                }
+            }
+        }
+        return countDirs;
     }
 
     /**
@@ -32,7 +88,16 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public void copyTXTFiles(String from, String to) {
-        return;
+        File dirFrom = new File(from);
+        File dirTo = new File(to);
+        if (!dirTo.getParentFile().exists()) {
+            dirTo.getParentFile().mkdirs();
+        }
+        try {
+            Files.copy(dirFrom.getAbsoluteFile().toPath(), dirTo.getAbsoluteFile().toPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -44,7 +109,33 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public boolean createFile(String path, String name) {
-        return false;
+
+        Path pathResultPath = Paths.get(path);
+
+        if (!pathResultPath.isAbsolute()) {
+
+            try {
+                Path pathAbsolut = Paths.get(this.getClass().getProtectionDomain().getCodeSource().getLocation().toURI());
+                path = pathAbsolut.toString() + "\\" + path;
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+        }
+        File file = new File(path, name);
+
+        if (!file.getParentFile().exists()) {
+            file.getParentFile().mkdirs();
+        }
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+                return file.exists();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return file.exists();
     }
 
     /**
@@ -55,6 +146,19 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public String readFileFromResources(String fileName) {
-        return null;
+
+        String textFromFile = "";
+        try (BufferedReader reader = new BufferedReader(
+                new FileReader("src/main/resources"+File.separator+fileName))){
+            while (reader.ready()) {
+                textFromFile += reader.readLine();
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return textFromFile;
     }
 }
