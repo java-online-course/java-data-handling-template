@@ -1,5 +1,12 @@
 package com.epam.izh.rd.online.service;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class SimpleRegExpService implements RegExpService {
 
     /**
@@ -9,9 +16,28 @@ public class SimpleRegExpService implements RegExpService {
      *
      * @return обработанный текст
      */
+    private static final String nameFile = "D:\\Epam_Java_Course\\java-data-handling-template\\src\\main\\" +
+            "resources\\sensitive_data.txt";
+
     @Override
     public String maskSensitiveData() {
-        return null;
+
+        StringBuilder outputString = null;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(nameFile))) {
+
+            outputString = new StringBuilder(reader.readLine());
+            Pattern pattern = Pattern.compile("(\\d{4} ){4}");
+            Matcher matcher =  pattern.matcher(outputString);
+
+            while (matcher.find()) {
+                outputString.replace(matcher.start() + 5, matcher.end() - 5, "**** **** ");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return Objects.requireNonNull(outputString).toString();
     }
 
     /**
@@ -22,6 +48,25 @@ public class SimpleRegExpService implements RegExpService {
      */
     @Override
     public String replacePlaceholders(double paymentAmount, double balance) {
-        return null;
+
+        StringBuilder outputString = null;
+
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(nameFile))) {
+            outputString = new StringBuilder(reader.readLine());
+            Pattern pattern = Pattern.compile("(\\$\\{)payment_amount}");
+            Matcher matcher =  pattern.matcher(outputString);
+            if (!matcher.find()) throw new IOException();
+            outputString.replace(matcher.start(), matcher.end(), Integer.toString((int) paymentAmount));
+            pattern = Pattern.compile("(\\$\\{)balance}");
+            matcher =  pattern.matcher(outputString);
+            if (!matcher.find()) throw new IOException();
+            outputString.replace(matcher.start(), matcher.end(), Integer.toString((int) balance));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return Objects.requireNonNull(outputString).toString();
     }
+
 }
