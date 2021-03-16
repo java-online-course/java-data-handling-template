@@ -2,6 +2,7 @@ package com.epam.izh.rd.online.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.time.format.DateTimeFormatter;
 
 public class SimpleDateService implements DateService {
@@ -14,7 +15,8 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public String parseDate(LocalDate localDate) {
-        return null;
+        DateTimeFormatter formatDate = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        return formatDate.format(localDate);
     }
 
     /**
@@ -25,7 +27,8 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public LocalDateTime parseString(String string) {
-        return null;
+        DateTimeFormatter formatDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        return LocalDateTime.parse(string, formatDate);
     }
 
     /**
@@ -37,7 +40,7 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public String convertToCustomFormat(LocalDate localDate, DateTimeFormatter formatter) {
-        return null;
+        return formatter.format(localDate);
     }
 
     /**
@@ -47,8 +50,15 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public long getNextLeapYear() {
+        for (int i = 2022; i < 2025; i++) {
+            if(Year.of(i).isLeap()) {
+                return i;
+            }
+        }
         return 0;
     }
+
+
 
     /**
      * Метод считает число секунд в заданном году
@@ -57,8 +67,6 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public long getSecondsInYear(int year) {
-        return 0;
+        return (long) LocalDate.of(year, 1, 1).lengthOfYear() *3600*24;
     }
-
-
 }
