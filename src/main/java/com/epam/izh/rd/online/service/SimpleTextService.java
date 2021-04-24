@@ -1,5 +1,8 @@
 package com.epam.izh.rd.online.service;
 
+import static java.lang.Character.toLowerCase;
+import static java.lang.Character.toUpperCase;
+
 public class SimpleTextService implements TextService {
 
     /**
@@ -13,7 +16,7 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String removeString(String base, String remove) {
-        return null; //TODO
+        return base.replace(remove, ""); //TODO
     }
 
     /**
@@ -24,6 +27,11 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public boolean isQuestionString(String text) {
+        if (text.equals("")) {return false;}
+        char[] charO = text.toCharArray();
+        if (charO[charO.length-1] == '?'){
+            return true;
+        };
         return false; //TODO
     }
 
@@ -35,7 +43,11 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String concatenate(String... elements) {
-        return null; //TODO
+        StringBuilder newLines = new StringBuilder();
+        for (String x: elements) {
+             newLines.append(x);
+        }
+        return newLines.toString(); //TODO
     }
 
     /**
@@ -47,7 +59,18 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String toJumpCase(String text) {
-        return null; //TODO
+        char[] charO = text.toCharArray();
+        for (int i = 0; i < charO.length; i++) {
+            if (i%2 == 0) {
+                charO[i] = Character.toLowerCase(charO[i]);
+            } else {
+                charO[i] = Character.toUpperCase(charO[i]);
+            }
+        }
+        String line = new String(charO);
+        System.out.println(line);
+
+        return line; //TODO
     }
 
     /**
@@ -59,6 +82,9 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public boolean isPalindrome(String string) {
-       return false; //TODO
+        if (string.equals("")){return false;}
+        return string.replaceAll("[a-zA-Zа-яА-Я]","")
+                .equalsIgnoreCase(new StringBuilder(string.replaceAll("[a-zA-Zа-яА-Я]",""))
+                .reverse().toString()); //TODO
     }
 }
