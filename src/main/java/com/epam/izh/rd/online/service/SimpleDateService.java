@@ -1,8 +1,11 @@
 package com.epam.izh.rd.online.service;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 public class SimpleDateService implements DateService {
 
@@ -14,7 +17,8 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public String parseDate(LocalDate localDate) {
-        return null;
+        String result = localDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        return result;
     }
 
     /**
@@ -25,7 +29,9 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public LocalDateTime parseString(String string) {
-        return null;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime result = LocalDateTime.parse(string, formatter);
+        return result;
     }
 
     /**
@@ -37,7 +43,8 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public String convertToCustomFormat(LocalDate localDate, DateTimeFormatter formatter) {
-        return null;
+        String result = localDate.format(formatter);
+        return result;
     }
 
     /**
@@ -47,7 +54,15 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public long getNextLeapYear() {
-        return 0;
+        Year ldNow = Year.now();
+        String year = ldNow.format(DateTimeFormatter.ofPattern("yyyy"));
+        Long result = Long.parseLong(year);
+        while (true) {
+            if (Year.isLeap(result)) {
+                return result;
+            } else
+                result++;
+        }
     }
 
     /**
@@ -57,7 +72,11 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public long getSecondsInYear(int year) {
-        return 0;
+        Year yea = Year.of(year);
+        if (yea.isLeap()) {
+            return (long) 366 * 24 * 3600;
+        } else
+            return (long) 365 * 24 * 3600;
     }
 
 

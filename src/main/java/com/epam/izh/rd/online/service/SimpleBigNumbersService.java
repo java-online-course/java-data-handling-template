@@ -2,6 +2,9 @@ package com.epam.izh.rd.online.service;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Arrays;
+
+import static java.math.RoundingMode.HALF_UP;
 
 public class SimpleBigNumbersService implements BigNumbersService {
 
@@ -13,7 +16,12 @@ public class SimpleBigNumbersService implements BigNumbersService {
      */
     @Override
     public BigDecimal getPrecisionNumber(int a, int b, int range) {
-        return null;
+        BigDecimal result;
+        BigDecimal ba = new BigDecimal(a);
+        BigDecimal bb = new BigDecimal(b);
+
+        result = ba.divide(bb, range, HALF_UP);
+        return result;
     }
 
     /**
@@ -24,6 +32,11 @@ public class SimpleBigNumbersService implements BigNumbersService {
      */
     @Override
     public BigInteger getPrimaryNumber(int range) {
-        return null;
+        BigInteger result = new BigInteger("2");
+        for (int i = 0; i < range; i++) {
+            result = result.nextProbablePrime();
+        }
+        return result;
+
     }
 }
