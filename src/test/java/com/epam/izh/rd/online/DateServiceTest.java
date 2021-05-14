@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.Year;
 import java.time.format.DateTimeFormatter;
@@ -33,7 +34,7 @@ public class DateServiceTest {
 
     @Test
     @DisplayName("Тест метода DateService.parseString(String string)")
-    void testParseString() {
+    void testParseString() throws ParseException {
         assertEquals(of(1970, 1, 1).atStartOfDay(), dateService.parseString("1970-01-01 00:00"),
                 "Для вызова метода: dateService.parseString(\"1970-01-01 00:00\")");
     }
