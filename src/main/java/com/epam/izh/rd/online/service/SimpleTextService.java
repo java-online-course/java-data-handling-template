@@ -1,5 +1,7 @@
 package com.epam.izh.rd.online.service;
 
+import java.util.Arrays;
+
 public class SimpleTextService implements TextService {
 
     /**
@@ -13,7 +15,8 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String removeString(String base, String remove) {
-        return null; //TODO
+
+        return base.replaceAll(remove,""); //TODO
     }
 
     /**
@@ -24,7 +27,7 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public boolean isQuestionString(String text) {
-        return false; //TODO
+        return text.endsWith("?"); //TODO
     }
 
     /**
@@ -35,7 +38,11 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String concatenate(String... elements) {
-        return null; //TODO
+        StringBuilder s= new StringBuilder();
+        for (String s2:elements){
+            s.append(s2);
+        }
+        return s.toString(); //TODO
     }
 
     /**
@@ -47,7 +54,17 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String toJumpCase(String text) {
-        return null; //TODO
+        char[] ch=text.toCharArray();
+        for (int i = 0; i <ch.length ; i+=2) {
+
+            ch[i]=Character.toLowerCase(ch[i]);
+        }
+        for (int i = 1; i <ch.length ; i+=2) {
+
+            ch[i]=Character.toUpperCase(ch[i]);
+        }
+        String str= String.valueOf(ch);
+        return str; //TODO
     }
 
     /**
@@ -59,6 +76,11 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public boolean isPalindrome(String string) {
-       return false; //TODO
+        if(string.equals("")) return false;
+       StringBuilder stringBuilder=new StringBuilder(string.toLowerCase().replaceAll(" ","")).reverse();
+       String s= String.valueOf(stringBuilder);
+       if(s.equals(string.toLowerCase().replace(" ","")))
+           return true;
+       else return false;
     }
 }

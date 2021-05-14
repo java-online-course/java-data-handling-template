@@ -1,5 +1,18 @@
 package com.epam.izh.rd.online.repository;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UncheckedIOException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class SimpleFileRepository implements FileRepository {
 
     /**
@@ -8,9 +21,22 @@ public class SimpleFileRepository implements FileRepository {
      * @param path путь до директори
      * @return файлов, в том числе скрытых
      */
+
     @Override
+
     public long countFilesInDirectory(String path) {
-        return 0;
+        int c = 0;
+        File file = new File("src/main/resources/" + path);
+        File[] s = file.listFiles();
+        if (s == null) return 0;
+
+        for (int j = 0; j < s.length; j++) {
+            if (s[j].isFile())
+                c++;
+            else
+                c += countFilesInDirectory(path + "/" + s[j].getName());
+        }
+        return c;
     }
 
     /**
@@ -21,8 +47,16 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public long countDirsInDirectory(String path) {
-        return 0;
+        long count = 1;
+        File f = new File("./src/main/resources/" + path);
+        File[] files = f.listFiles();
+        for (File file : files) {
+            if (file.isDirectory())
+                count += countDirsInDirectory(path + "/" + file.getName());
+        }
+        return count;
     }
+
 
     /**
      * Метод копирует все файлы с расширением .txt
@@ -32,7 +66,18 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public void copyTXTFiles(String from, String to) {
-        return;
+        Path fileFrom = Paths.get(from);
+        Path fileTo = Paths.get(to);
+        Path directory = fileTo.getParent();
+
+        try {
+            Files.createDirectories(directory);
+            Files.copy(fileFrom, fileTo);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     /**
@@ -43,8 +88,18 @@ public class SimpleFileRepository implements FileRepository {
      * @return был ли создан файл
      */
     @Override
-    public boolean createFile(String path, String name) {
-        return false;
+    public boolean createFile(String path, String name) throws IOException {
+        // Path filePath= Paths.get(path+"/"+name);
+        //File filePath = new File("src/main/resources/"+path);
+       // path = "C:\\gitprojects\\java-data-handling-template\\src\\main\\resources" + File.separator + "testDirCreateFile" + File.separator + "newFile.txt";
+// Use relative path for Unix systems
+        URL url = getClass().getResource("/");
+        File f = new File(url.getPath()+path+File.separator+name);
+
+        f.getParentFile().mkdirs();
+        //f.createNewFile();
+
+        return f.createNewFile();
     }
 
     /**
@@ -55,6 +110,12 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public String readFileFromResources(String fileName) {
-        return null;
+        List<String> fileContent = null;
+        try {
+            fileContent = new ArrayList<>(Files.readAllLines(Paths.get("src/main/resources/readme.txt")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return fileContent.get(0);
     }
 }

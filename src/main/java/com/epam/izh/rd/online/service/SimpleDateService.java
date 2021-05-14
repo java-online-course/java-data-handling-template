@@ -1,8 +1,13 @@
 package com.epam.izh.rd.online.service;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class SimpleDateService implements DateService {
 
@@ -14,7 +19,11 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public String parseDate(LocalDate localDate) {
-        return null;
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        int year = localDate.getYear();
+        int month = localDate.getMonthValue();
+        int dayOfMonth = localDate.getDayOfMonth();
+        return dayOfMonth+"-"+String.format("%02d", month)+"-"+year;
     }
 
     /**
@@ -24,8 +33,12 @@ public class SimpleDateService implements DateService {
      * @return дата и время
      */
     @Override
-    public LocalDateTime parseString(String string) {
-        return null;
+    public LocalDateTime parseString(String string)  {
+        DateTimeFormatter DATEFORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        //LocalDateTime ld = LocalDateTime.parse(string, DATEFORMATTER);
+
+
+        return LocalDateTime.parse(string, DATEFORMATTER);
     }
 
     /**
@@ -37,7 +50,8 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public String convertToCustomFormat(LocalDate localDate, DateTimeFormatter formatter) {
-        return null;
+
+        return formatter.format(localDate);
     }
 
     /**
@@ -47,6 +61,10 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public long getNextLeapYear() {
+        for (int i = 2021; i <Integer.MAX_VALUE ; i++) {
+            if(Year.of(i).isLeap())
+                return i;
+        }
         return 0;
     }
 
@@ -57,7 +75,9 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public long getSecondsInYear(int year) {
-        return 0;
+        if(Year.of(year).isLeap()) return 366*24*60*60;
+        else return 365*24*60*60;
+
     }
 
 
