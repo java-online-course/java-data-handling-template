@@ -1,5 +1,9 @@
 package com.epam.izh.rd.online.service;
 
+import java.io.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class SimpleRegExpService implements RegExpService {
 
     /**
@@ -11,17 +15,55 @@ public class SimpleRegExpService implements RegExpService {
      */
     @Override
     public String maskSensitiveData() {
-        return null;
+        String allMaskedText = "";
+        try (FileReader fileReader = new FileReader("src/main/resources/sensitive_data.txt");
+             BufferedReader bufferedReader = new BufferedReader(fileReader);
+        ) {
+            String allText = bufferedReader.readLine();
+            Pattern pattern = Pattern.compile("\\b([0-9]{4})\\s[0-9]{0,9}\\s[0-9]{0,9}\\s([0-9]{4})\\b");
+            Matcher matcher = pattern.matcher(allText);
+            String maskForCard = "$1 **** **** $2";
+            if (matcher.find()) {
+                allMaskedText = matcher.replaceAll(maskForCard);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return allMaskedText;
     }
 
     /**
-     * Метод должен считыввать файл sensitive_data.txt (из директории resources) и заменять плейсхолдер ${payment_amount} и ${balance} на заданные числа. Метод должен
+     * Метод должен считывать файл sensitive_data.txt (из директории resources) и заменять плейсхолдер ${payment_amount} и ${balance} на заданные числа. Метод должен
      * содержать регулярное выражение для поиска плейсхолдеров
      *
      * @return обработанный текст
      */
     @Override
     public String replacePlaceholders(double paymentAmount, double balance) {
-        return null;
+        String replacePlaceholderAllText = "";
+        try (FileReader fileReader = new FileReader("src/main/resources/sensitive_data.txt");
+             BufferedReader bufferedReader = new BufferedReader(fileReader);
+        ) {
+            String allText = bufferedReader.readLine();
+            Pattern patternForBalance = Pattern.compile("\\$\\{balance\\}");
+            Matcher matcherBalance = patternForBalance.matcher(allText);
+            String balanceReplace = String.format("%.0f", balance);
+            String paymentReplace = String.format("%.0f", paymentAmount);
+            if (matcherBalance.find()) {
+                String replacePlaceholderBalance = matcherBalance.replaceAll(balanceReplace);
+                Pattern patternForPayment = Pattern.compile("\\$\\{payment_amount\\}");
+                Matcher matcherPayment = patternForPayment.matcher(replacePlaceholderBalance);
+                if (matcherPayment.find()) {
+                    replacePlaceholderAllText = matcherPayment.replaceAll(paymentReplace);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return replacePlaceholderAllText;
     }
 }
