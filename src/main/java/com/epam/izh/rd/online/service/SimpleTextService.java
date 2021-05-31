@@ -1,5 +1,7 @@
 package com.epam.izh.rd.online.service;
 
+import java.util.Locale;
+
 public class SimpleTextService implements TextService {
 
     /**
@@ -13,7 +15,7 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String removeString(String base, String remove) {
-        return null; //TODO
+        return base.replaceAll(remove, "");
     }
 
     /**
@@ -24,7 +26,7 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public boolean isQuestionString(String text) {
-        return false; //TODO
+        return text.endsWith("?");
     }
 
     /**
@@ -35,7 +37,12 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String concatenate(String... elements) {
-        return null; //TODO
+        StringBuilder string = new StringBuilder();
+
+        for (String element : elements) {
+            string.append(element);
+        }
+        return string.toString();
     }
 
     /**
@@ -47,8 +54,16 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String toJumpCase(String text) {
-        return null; //TODO
-    }
+            char[] chars = text.toCharArray();
+            for (int i = 0; i < chars.length; i++) {
+                if (i % 2 == 0) {
+                    chars[i] = Character.toLowerCase(chars[i]);
+                } else {
+                    chars[i] = Character.toUpperCase(chars[i]);
+                }
+            }
+            return String.valueOf(chars);
+        }
 
     /**
      * Метод определяет, является ли строка палиндромом.
@@ -59,6 +74,10 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public boolean isPalindrome(String string) {
-       return false; //TODO
+        StringBuilder stringBuilder = new StringBuilder(string);
+        String str1 = stringBuilder.reverse().toString();
+        if (string.equals("")){
+            return false;
+        }else return string.replaceAll("\\s+", "").toLowerCase(Locale.ROOT).equals(str1.toLowerCase(Locale.ROOT).replaceAll("\\s+", ""));
     }
 }
