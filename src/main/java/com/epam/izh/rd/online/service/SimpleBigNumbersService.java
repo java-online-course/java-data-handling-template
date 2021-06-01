@@ -21,7 +21,6 @@ public class SimpleBigNumbersService implements BigNumbersService {
         return bigDecimalA.divide(bigDecimalB,range, RoundingMode.HALF_UP);
     }
 
-
     /**
      * Метод находит простое число по номеру
      *
