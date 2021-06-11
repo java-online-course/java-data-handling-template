@@ -1,5 +1,11 @@
 package com.epam.izh.rd.online.service;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class SimpleRegExpService implements RegExpService {
 
     /**
@@ -11,7 +17,19 @@ public class SimpleRegExpService implements RegExpService {
      */
     @Override
     public String maskSensitiveData() {
-        return null;
+        String path = "src/main/resources/sensitive_data.txt";
+        String text = null;
+        String newText = null;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+            text = br.readLine();
+        } catch (IOException e) {
+            System.out.println("Файл не найден");
+        }
+        Pattern pattern = Pattern.compile("(\\s\\d{4}\\s)\\d{4}\\s\\d{4}\\s(\\d{4}\\s)"); //("[0-9]\\s[\\d]{4}\\s[\\d]{4}\\s")
+        Matcher matcher = pattern.matcher(text);
+        newText = matcher.replaceAll("$1**** **** $2");
+        return newText;
     }
 
     /**
@@ -22,6 +40,27 @@ public class SimpleRegExpService implements RegExpService {
      */
     @Override
     public String replacePlaceholders(double paymentAmount, double balance) {
-        return null;
+        String path = "src/main/resources/sensitive_data.txt";
+        String text = null;
+        String newText = null;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+            text = br.readLine();
+        } catch (IOException e) {
+            System.out.println("Файл не найден");
+        }
+
+        String stringPaymentAmount = String.valueOf((int) paymentAmount);
+        Pattern paymentPattern = Pattern.compile("\\$\\{payment_amount\\}");
+        Matcher paymentMatcher = paymentPattern.matcher(text);
+        newText = paymentMatcher.replaceFirst(stringPaymentAmount);
+
+        String stringBalance = String.valueOf((int) balance);
+        Pattern balancePattern = Pattern.compile("\\$\\{balance\\}");
+        Matcher balanceMatcher = balancePattern.matcher(newText);
+        newText = balanceMatcher.replaceFirst(stringBalance);
+
+        return newText;
     }
 }
+
