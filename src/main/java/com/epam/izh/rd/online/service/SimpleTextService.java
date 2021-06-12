@@ -1,5 +1,7 @@
 package com.epam.izh.rd.online.service;
 
+import java.util.Locale;
+
 public class SimpleTextService implements TextService {
 
     /**
@@ -13,7 +15,7 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String removeString(String base, String remove) {
-        return null; //TODO
+        return base.replaceAll(remove, "");
     }
 
     /**
@@ -24,7 +26,7 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public boolean isQuestionString(String text) {
-        return false; //TODO
+        return text.endsWith("?");
     }
 
     /**
@@ -35,7 +37,11 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String concatenate(String... elements) {
-        return null; //TODO
+        String newStr = "";
+        for (String str : elements) {
+            newStr = newStr.concat(str);
+        }
+        return newStr;
     }
 
     /**
@@ -47,7 +53,19 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String toJumpCase(String text) {
-        return null; //TODO
+        char[] def = text.toCharArray();
+        text = "";
+        boolean flag = true;
+        for (char ch : def){
+            if (flag) {
+                text += Character.toLowerCase(ch);
+                flag = false;
+            } else {
+                text += Character.toUpperCase(ch);
+                flag = true;
+            }
+        }
+        return text;
     }
 
     /**
@@ -59,6 +77,11 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public boolean isPalindrome(String string) {
-       return false; //TODO
+        String raw = string.toLowerCase(Locale.ROOT).replace(" ", "").replace(",", "");
+        String palindrome = new StringBuilder(raw).reverse().toString();
+        if (raw.isEmpty()) {
+            return false;
+        }
+        return palindrome.equals(raw);
     }
 }
