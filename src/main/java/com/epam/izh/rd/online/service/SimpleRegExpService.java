@@ -1,5 +1,12 @@
 package com.epam.izh.rd.online.service;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class SimpleRegExpService implements RegExpService {
 
     /**
@@ -11,7 +18,24 @@ public class SimpleRegExpService implements RegExpService {
      */
     @Override
     public String maskSensitiveData() {
-        return null;
+        File file = new File("src/main/resources/sensitive_data.txt");
+        String text = "";
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            text = reader.readLine();
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+        String regex = "\\d{4}\\s\\d{4}\\s\\d{4}\\s\\d{4}";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(text);
+        String cardNumber;
+        String[] numberParts;
+        while (matcher.find()) {
+            cardNumber = matcher.group();
+            numberParts = cardNumber.split(" ");
+            text = text.replaceAll(cardNumber,numberParts[0] + " **** **** " + numberParts[3]);
+        }
+        return text;
     }
 
     /**
@@ -22,6 +46,21 @@ public class SimpleRegExpService implements RegExpService {
      */
     @Override
     public String replacePlaceholders(double paymentAmount, double balance) {
-        return null;
+        String text = "";
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/sensitive_data.txt"))) {
+            text = reader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Pattern pattern = Pattern.compile("\\$\\{.*?}");
+        Matcher matcher = pattern.matcher(text);
+        while (matcher.find()) {
+            if (matcher.group().equals("${payment_amount}")) {
+                text = text.replaceAll("\\$\\{payment_amount}", "" + (int)paymentAmount);
+            } else if (matcher.group().equals("${balance}")) {
+                text = text.replaceAll("\\$\\{balance}", "" + (int)balance);
+            }
+        }
+        return text;
     }
 }
