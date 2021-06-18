@@ -1,16 +1,25 @@
 package com.epam.izh.rd.online.repository;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+
 public class SimpleFileRepository implements FileRepository {
 
     /**
      * Метод рекурсивно подсчитывает количество файлов в директории
      *
-     * @param path путь до директори
+     * @param path путь до директории
      * @return файлов, в том числе скрытых
      */
     @Override
     public long countFilesInDirectory(String path) {
-        return 0;
+        File dir = new File(path); //path указывает на директорию
+        File[] arrFiles = dir.listFiles();
+        assert arrFiles != null;
+        List<File> lst = Arrays.asList(arrFiles);
+        return lst.size();
     }
 
     /**
@@ -21,7 +30,12 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public long countDirsInDirectory(String path) {
-        return 0;
+
+        File dir = new File(path); //path указывает на директорию
+        File[] arrFiles = dir.listFiles();
+        assert arrFiles != null;
+        List<File> lst = Arrays.asList(arrFiles);
+        return lst.size() + 1;
     }
 
     /**
@@ -44,8 +58,18 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public boolean createFile(String path, String name) {
-        return false;
+        File file = new File(path + name);
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (file.exists()){
+        }return true;
     }
+
+
+
 
     /**
      * Метод считывает тело файла .txt из папки src/main/resources
