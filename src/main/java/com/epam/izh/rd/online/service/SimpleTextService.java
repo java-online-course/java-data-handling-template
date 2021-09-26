@@ -1,5 +1,9 @@
 package com.epam.izh.rd.online.service;
 
+import java.util.Locale;
+
+import static java.awt.SystemColor.text;
+
 public class SimpleTextService implements TextService {
 
     /**
@@ -12,8 +16,8 @@ public class SimpleTextService implements TextService {
      * @param remove - строка которую необходимо удалить
      */
     @Override
-    public String removeString(String base, String remove) {
-        return null; //TODO
+    public String removeString(String base, String remove)
+    {      return base.replaceAll(remove, "");
     }
 
     /**
@@ -23,9 +27,9 @@ public class SimpleTextService implements TextService {
      * Например для строки "Hello, hello, hello!" метод вернет false
      */
     @Override
-    public boolean isQuestionString(String text) {
-        return false; //TODO
-    }
+    public boolean isQuestionString(String text){
+         return text.endsWith("?");
+}
 
     /**
      * Реализовать функционал соединения переданных строк.
@@ -35,7 +39,11 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String concatenate(String... elements) {
-        return null; //TODO
+        StringBuilder aBuilder = new StringBuilder();
+        for (int i = 0; i < elements.length; i++) {
+            aBuilder.append(elements[i]);
+        }
+        return aBuilder.toString();
     }
 
     /**
@@ -47,7 +55,11 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String toJumpCase(String text) {
-        return null; //TODO
+        char[] chars = text.toLowerCase().toCharArray();
+        for (int i = 1; i < chars.length; i += 2) {
+            chars[i] = Character.toUpperCase(chars[i]);
+        }
+        return new String(chars);
     }
 
     /**
@@ -59,6 +71,11 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public boolean isPalindrome(String string) {
-       return false; //TODO
+        String raw = string.toLowerCase(Locale.ROOT).replace(" ", "").replace(",", "");
+        String palindrome = new StringBuilder(raw).reverse().toString();
+        if (raw.isEmpty()) {
+            return false;
+        }
+        return palindrome.equals(raw);
     }
 }
