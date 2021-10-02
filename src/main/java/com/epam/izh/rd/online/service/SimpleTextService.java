@@ -71,6 +71,9 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public boolean isPalindrome(String string) {
-       return false; //TODO
+        String origString = string.replaceAll(" ", "").toLowerCase();
+        StringBuilder builder = new StringBuilder(origString);
+        builder.reverse();
+        return string.length() < 1 ? false : origString.equals(builder.toString());
     }
 }
