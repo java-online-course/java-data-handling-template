@@ -13,7 +13,7 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String removeString(String base, String remove) {
-        return null; //TODO
+        return base.replaceAll(remove, "");
     }
 
     /**
