@@ -1,5 +1,7 @@
 package com.epam.izh.rd.online.repository;
 
+import java.io.File;
+
 public class SimpleFileRepository implements FileRepository {
 
     /**
@@ -10,7 +12,17 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public long countFilesInDirectory(String path) {
-        return 0;
+        int countFiles = 0;
+        File folder = new File("src/main/resources/" + path);
+
+        if (folder.isDirectory()) {
+            for (File file : folder.listFiles()) {
+                countFiles += countFilesInDirectory(path + "/" + file.getName());
+            }
+        } else {
+            countFiles++;
+        }
+        return countFiles;
     }
 
     /**
