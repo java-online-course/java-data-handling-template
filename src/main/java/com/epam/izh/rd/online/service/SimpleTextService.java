@@ -35,7 +35,11 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String concatenate(String... elements) {
-        return null; //TODO
+        String concatenatedString = "";
+        for (String string : elements) {
+            concatenatedString += string;
+        }
+        return concatenatedString;
     }
 
     /**
