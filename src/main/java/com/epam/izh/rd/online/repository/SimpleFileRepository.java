@@ -79,6 +79,17 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public boolean createFile(String path, String name) {
+        File folder = new File(getClass().getResource("/").getPath() + path);
+        if (!folder.exists()) {
+            folder.mkdir();
+        }
+
+        File file = new File(folder.getPath(), name);
+        try {
+            return file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
