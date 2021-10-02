@@ -1,6 +1,8 @@
 package com.epam.izh.rd.online.repository;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 public class SimpleFileRepository implements FileRepository {
 
@@ -56,7 +58,16 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public void copyTXTFiles(String from, String to) {
-        return;
+        File pathToCopy = new File(to);
+        if (!pathToCopy.getParentFile().exists()) {
+            pathToCopy.getParentFile().mkdirs();
+        }
+        File pathFromCopy = new File(from);
+        try {
+            Files.copy(pathFromCopy.getAbsoluteFile().toPath(), pathToCopy.getAbsoluteFile().toPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
