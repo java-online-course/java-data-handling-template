@@ -51,7 +51,15 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String toJumpCase(String text) {
-        return null; //TODO
+        String stairStyleString = "";
+        for (int i = 0; i < text.length(); i++) {
+            if (i == 0 || i % 2 == 0) {
+                stairStyleString += String.valueOf(text.charAt(i)).toLowerCase();
+            } else {
+                stairStyleString += String.valueOf(text.charAt(i)).toUpperCase();
+            }
+        }
+        return stairStyleString;
     }
 
     /**
