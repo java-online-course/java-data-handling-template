@@ -33,7 +33,19 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public long countDirsInDirectory(String path) {
-        return 0;
+        int countDirectories = 1;
+        File folder = new File("src/main/resources/" + path);
+        File[] files = folder.listFiles();
+        if (files == null) {
+            return 0;
+        }
+
+        for (File file : files) {
+            if (file.isDirectory()) {
+                countDirectories += countDirsInDirectory(path + "/" + file.getName());
+            }
+        }
+        return countDirectories;
     }
 
     /**
