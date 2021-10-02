@@ -1,5 +1,12 @@
 package com.epam.izh.rd.online.service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class SimpleRegExpService implements RegExpService {
 
     /**
@@ -11,6 +18,21 @@ public class SimpleRegExpService implements RegExpService {
      */
     @Override
     public String maskSensitiveData() {
+        String originalText = "";
+        try {
+            List<String> list = Files.readAllLines(Paths.get("src/main/resources/sensitive_data.txt"));
+            for (String string : list) {
+                originalText += string;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Pattern pattern = Pattern.compile("(\\d{4}) (\\d{4}) (\\d{4}) (\\d{4})");
+        Matcher matcher = pattern.matcher(originalText);
+        if(matcher.find()) {
+            return matcher.replaceAll("$1 **** **** $4");
+        }
         return null;
     }
 
