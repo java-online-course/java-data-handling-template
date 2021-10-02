@@ -3,6 +3,8 @@ package com.epam.izh.rd.online.repository;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 
 public class SimpleFileRepository implements FileRepository {
 
@@ -101,6 +103,16 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public String readFileFromResources(String fileName) {
-        return null;
+        File file = new File("src/main/resources", fileName);
+        String reader = "";
+        try {
+            List<String> lines = Files.readAllLines(Paths.get(String.valueOf(file)));
+            for (String string : lines) {
+                reader += string;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return reader;
     }
 }
