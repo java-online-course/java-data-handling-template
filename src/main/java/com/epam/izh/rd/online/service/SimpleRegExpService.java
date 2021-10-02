@@ -44,6 +44,18 @@ public class SimpleRegExpService implements RegExpService {
      */
     @Override
     public String replacePlaceholders(double paymentAmount, double balance) {
-        return null;
+        String originalText = "";
+        try {
+            List<String> list = Files.readAllLines(Paths.get("src/main/resources/sensitive_data.txt"));
+            for (String string : list) {
+                originalText += string;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        originalText = originalText.replaceAll("[$]\\{[a-z]+_[a-z]+\\}", String.valueOf((int)paymentAmount));
+        originalText = originalText.replaceAll("[$]\\{[a-z]+\\}", String.valueOf((int)balance));
+
+        return originalText;
     }
 }
