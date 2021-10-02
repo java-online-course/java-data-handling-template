@@ -2,6 +2,7 @@ package com.epam.izh.rd.online.service;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 
 public class SimpleBigNumbersService implements BigNumbersService {
 
@@ -13,7 +14,10 @@ public class SimpleBigNumbersService implements BigNumbersService {
      */
     @Override
     public BigDecimal getPrecisionNumber(int a, int b, int range) {
-        return null;
+        BigDecimal bd1 = BigDecimal.valueOf(a);
+        BigDecimal bd2 = BigDecimal.valueOf(b);
+        BigDecimal bd3 = bd1.divide(bd2, 2, RoundingMode.DOWN);
+        return bd3;
     }
 
     /**
