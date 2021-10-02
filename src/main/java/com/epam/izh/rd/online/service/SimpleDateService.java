@@ -48,7 +48,12 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public long getNextLeapYear() {
-        return 0;
+        LocalDate date = LocalDate.now();
+        long year = date.getYear();
+        while (year % 4 != 0) {
+            year++;
+        }
+        return year;
     }
 
     /**
