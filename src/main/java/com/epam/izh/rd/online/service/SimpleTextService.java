@@ -62,10 +62,11 @@ public class SimpleTextService implements TextService {
     @Override
     public String toJumpCase(String text) {
         StringBuilder sb = new StringBuilder();
-        text = text.toLowerCase(Locale.ROOT);
         for (int i = 0; i < text.length(); i++) {
             if (i % 2 != 0) {
                 sb.append(Character.toUpperCase(text.charAt(i)));
+            } else {
+                sb.append(Character.toLowerCase(text.charAt(i)));
             }
         }
         return sb.toString();
