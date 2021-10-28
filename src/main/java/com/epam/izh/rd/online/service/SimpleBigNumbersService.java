@@ -2,6 +2,7 @@ package com.epam.izh.rd.online.service;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 
 public class SimpleBigNumbersService implements BigNumbersService {
 
@@ -13,7 +14,10 @@ public class SimpleBigNumbersService implements BigNumbersService {
      */
     @Override
     public BigDecimal getPrecisionNumber(int a, int b, int range) {
-        return null;
+
+        BigDecimal bigA = new BigDecimal(a);
+        BigDecimal bigB = new BigDecimal(b);
+        return  bigA.divide(bigB, range, RoundingMode.HALF_UP);
     }
 
     /**
@@ -24,6 +28,54 @@ public class SimpleBigNumbersService implements BigNumbersService {
      */
     @Override
     public BigInteger getPrimaryNumber(int range) {
-        return null;
+
+        int size = range;
+        int[] primes = new int[range + 1];
+        int[] numbers = new int[size];
+
+        for (int i = 0; i < size; i++) {
+            numbers[i] = i;
+        }
+
+        primes[0] = 2;
+        int i = 0;
+
+        while (i < range) {
+            int p = primes[i++];
+
+            for (int j = p * 2; j < size; j += p) {
+                numbers[j] = 0;
+            }
+
+            try {
+                while(numbers[p + 1] == 0) {
+                    p++;
+                }
+            } catch (ArrayIndexOutOfBoundsException e) {
+
+            } finally {
+                if (p + 1 >= size) {
+                    int[] temp = new int[size * 2];
+
+                    for (int k = 0; k < size; k++){
+                        temp[k] = numbers[k];
+                    }
+
+                    size *= 2;
+                    numbers = temp;
+
+                    for (int j = size / 2; j < size; j++) {
+                        numbers[j] = j;
+                    }
+
+                    i = 0;
+                } else {
+                    primes[i] = p + 1;
+                }
+            }
+
+        }
+        return new BigInteger(String.valueOf(primes[range]));
+
     }
 }
