@@ -1,5 +1,12 @@
 package com.epam.izh.rd.online.service;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class SimpleRegExpService implements RegExpService {
 
     /**
@@ -11,7 +18,31 @@ public class SimpleRegExpService implements RegExpService {
      */
     @Override
     public String maskSensitiveData() {
-        return null;
+        String contentLine = null;
+        String fileName = "src/main/resources/sensitive_data.txt";
+        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+            StringBuilder builderString = new StringBuilder();
+            int ch;
+
+            while ((ch = br.read()) != -1) {
+                builderString.append((char) ch);
+            }
+
+            contentLine = builderString.toString().trim();
+            Pattern pattern = Pattern.compile("\\d{4}\\s(\\d{4}\\s\\d{4})\\s\\d{4}");
+            Matcher matcher = pattern.matcher(contentLine);
+
+            while (matcher.find()) {
+                contentLine = contentLine.replaceAll(matcher.group(1), "**** ****");
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        return contentLine;
     }
 
     /**
@@ -22,6 +53,36 @@ public class SimpleRegExpService implements RegExpService {
      */
     @Override
     public String replacePlaceholders(double paymentAmount, double balance) {
-        return null;
+        String contentLine = null;
+        String fileName = "src/main/resources/sensitive_data.txt";
+        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+            StringBuilder builderString = new StringBuilder();
+            int ch;
+
+            while ((ch = br.read()) != -1) {
+                builderString.append((char) ch);
+            }
+
+            contentLine = builderString.toString().trim();
+            Pattern pattern = Pattern.compile("\\$\\{(\\w+)}");
+            Matcher matcher = pattern.matcher(contentLine);
+
+            while (matcher.find()) {
+                String group = Pattern.quote(matcher.group());
+                String lineRegEx = matcher.group(1).intern();
+
+                if(lineRegEx.equals("payment_amount")) {
+                    contentLine = contentLine.replaceAll(group, String.valueOf((int) paymentAmount));
+                }
+                if(lineRegEx.equals("balance")) {
+                    contentLine = contentLine.replaceAll(group, String.valueOf((int) balance));
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return contentLine;
     }
 }
