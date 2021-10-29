@@ -1,5 +1,10 @@
 package com.epam.izh.rd.online.repository;
 
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 public class SimpleFileRepository implements FileRepository {
 
     /**
@@ -10,7 +15,30 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public long countFilesInDirectory(String path) {
-        return 0;
+        String absPath = "src" + "/" + "main" + "/" + "resources" + "/";
+        Path relPath;
+        if (path.contains("src\\main\\resources")) {
+            relPath = Path.of(path);
+        } else {
+            relPath = Path.of(absPath + path);
+        }
+
+        long count = 0;
+        if (Files.isRegularFile(relPath)) {
+            return ++count;
+        }
+
+        if (Files.isDirectory(relPath)) {
+            try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(relPath)) {
+                for (Path files : directoryStream) {
+                    count += countFilesInDirectory(files.toString());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return count;
     }
 
     /**
@@ -21,7 +49,30 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public long countDirsInDirectory(String path) {
-        return 0;
+        String absPath = "src" + "/" + "main" + "/" + "resources" + "/";
+        Path relPath;
+        if (path.contains("src\\main\\resources")) {
+            relPath = Path.of(path);
+        } else {
+            relPath = Path.of(absPath + path);
+        }
+
+        long count = 1;
+
+        if (Files.isDirectory(relPath)) {
+            try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(relPath)) {
+                for (Path files : directoryStream) {
+                    if (Files.isRegularFile(files)) {
+                        continue;
+                    }
+                    count += countDirsInDirectory(files.toString());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return count;
     }
 
     /**
