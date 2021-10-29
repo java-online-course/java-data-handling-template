@@ -36,12 +36,10 @@ public class SimpleRegExpService implements RegExpService {
                 contentLine = contentLine.replaceAll(matcher.group(1), "**** ****");
             }
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
+
         return contentLine;
     }
 
@@ -78,8 +76,6 @@ public class SimpleRegExpService implements RegExpService {
                     contentLine = contentLine.replaceAll(group, String.valueOf((int) balance));
                 }
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

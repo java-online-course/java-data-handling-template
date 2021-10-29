@@ -90,7 +90,7 @@ public class SimpleFileRepository implements FileRepository {
         if (!Files.exists(Paths.get(to))) {
             try{
                 Files.createFile(Paths.get(to));
-            } catch (IOException e) {}
+            } catch (IOException ignored) {}
 
         }
 
@@ -102,8 +102,6 @@ public class SimpleFileRepository implements FileRepository {
                 int len = 0;
                 while ((len = in.read(buff)) > 0)
                     out.write(buff, 0, len);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -152,8 +150,6 @@ public class SimpleFileRepository implements FileRepository {
         String line = null;
         try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/" + fileName))) {
             line = br.readLine();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

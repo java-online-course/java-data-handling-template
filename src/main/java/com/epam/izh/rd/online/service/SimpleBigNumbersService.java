@@ -51,15 +51,13 @@ public class SimpleBigNumbersService implements BigNumbersService {
                 while(numbers[p + 1] == 0) {
                     p++;
                 }
-            } catch (ArrayIndexOutOfBoundsException e) {
+            } catch (ArrayIndexOutOfBoundsException ignored) {
 
             } finally {
                 if (p + 1 >= size) {
                     int[] temp = new int[size * 2];
 
-                    for (int k = 0; k < size; k++){
-                        temp[k] = numbers[k];
-                    }
+                    if (size >= 0) System.arraycopy(numbers, 0, temp, 0, size);
 
                     size *= 2;
                     numbers = temp;
