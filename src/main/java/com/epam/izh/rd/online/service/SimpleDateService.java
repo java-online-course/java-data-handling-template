@@ -2,7 +2,10 @@ package com.epam.izh.rd.online.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
 
 public class SimpleDateService implements DateService {
 
@@ -14,7 +17,9 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public String parseDate(LocalDate localDate) {
-        return null;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String string = localDate.format(formatter);
+        return string;
     }
 
     /**
@@ -25,7 +30,9 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public LocalDateTime parseString(String string) {
-        return null;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime localDate = LocalDateTime.parse(string, formatter);
+        return localDate;
     }
 
     /**
@@ -37,7 +44,8 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public String convertToCustomFormat(LocalDate localDate, DateTimeFormatter formatter) {
-        return null;
+        String string = localDate.format(formatter);
+        return string;
     }
 
     /**
@@ -47,7 +55,14 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public long getNextLeapYear() {
-        return 0;
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        int currentYear = cal.get(Calendar.YEAR);
+        int nextLeapYear = currentYear;
+        while (!Year.isLeap(nextLeapYear) ) {
+            nextLeapYear++;
+        }
+        return nextLeapYear;
     }
 
     /**
@@ -57,7 +72,9 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public long getSecondsInYear(int year) {
-        return 0;
+        int daysInYear = Year.of(2020).length();
+        int seconds = daysInYear * 24 * 60 * 60;
+        return seconds;
     }
 
 

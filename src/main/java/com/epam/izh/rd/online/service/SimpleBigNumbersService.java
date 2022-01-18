@@ -13,7 +13,8 @@ public class SimpleBigNumbersService implements BigNumbersService {
      */
     @Override
     public BigDecimal getPrecisionNumber(int a, int b, int range) {
-        return null;
+        return BigDecimal.valueOf(a).divide(BigDecimal.valueOf(b),
+                range, BigDecimal.ROUND_FLOOR);
     }
 
     /**
@@ -24,6 +25,23 @@ public class SimpleBigNumbersService implements BigNumbersService {
      */
     @Override
     public BigInteger getPrimaryNumber(int range) {
-        return null;
+        int status = 1;
+        int num = 3;
+
+        for (int i = 0; i < range; ) {
+            for (int j = 2; j <= Math.sqrt(num); j++) {
+                if (num % j == 0) {
+                    status = 0;
+                    break;
+                }
+            }
+            if (status != 0) {
+                i++;
+            }
+            status = 1;
+            num++;
+        }
+        return new BigInteger(String.valueOf(num - 1));
+
     }
 }
