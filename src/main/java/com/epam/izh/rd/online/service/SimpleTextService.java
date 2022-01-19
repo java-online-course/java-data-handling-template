@@ -1,5 +1,7 @@
 package com.epam.izh.rd.online.service;
 
+import java.util.Locale;
+
 public class SimpleTextService implements TextService {
 
     /**
@@ -24,7 +26,13 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public boolean isQuestionString(String text) {
-        return false; //TODO
+        boolean isQuestionString = false;
+        if(text.length() > 0) {
+            if(text.charAt(text.length() - 1) == '?') {
+                isQuestionString = true;
+            }
+        }
+        return isQuestionString; //TODO
     }
 
     /**
@@ -35,7 +43,13 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String concatenate(String... elements) {
-        return null; //TODO
+        String s = "";
+        if (elements.length > 0 ) {
+            for(String string : elements ){
+            s = s + string;
+            }
+        }
+        return s; //TODO
     }
 
     /**
@@ -47,7 +61,17 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String toJumpCase(String text) {
-        return null; //TODO
+        String string = "";
+        if (text.length() > 0) {
+            String stringLowerCase = text.toLowerCase();
+            String stringUpperCase = text.toUpperCase();
+            for(int i = text.length()-1; i >=0 ; i--) {
+                string = stringUpperCase.charAt(i) + string;
+                i--;
+                string = stringLowerCase.charAt(i) + string;
+            }
+        }
+        return string; //TODO
     }
 
     /**
@@ -59,6 +83,22 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public boolean isPalindrome(String string) {
-       return false; //TODO
+        boolean isPalindrome = false;
+        if (string.length() > 0 ) {
+            String stringNoSpace = "";
+            for (int i = string.length() - 1 ; i >= 0; i--) {
+                if (string.charAt(i) != ' ') {
+                    stringNoSpace = string.charAt(i) + stringNoSpace;
+                }
+            }
+            stringNoSpace = stringNoSpace.toLowerCase();
+
+            String reverse = "";
+            for (int i = 0; i < stringNoSpace.length(); i++) {
+                reverse = stringNoSpace.charAt(i) + reverse;
+            }
+            isPalindrome = stringNoSpace.equals(reverse);
+            }
+        return isPalindrome;
     }
 }

@@ -12,16 +12,20 @@ public class Main {
 
     public static void main( String args[]) {
 
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
-        int currentYear = cal.get(Calendar.YEAR);
-        int nextLeapYear = currentYear;
-        while (!Year.isLeap(nextLeapYear) ) {
-            nextLeapYear++;
-        }
-        boolean leap = Year.isLeap(nextLeapYear) ;
-        System.out.println(leap + " " + nextLeapYear);
-    }
+        String text = "N роза упала на лапу Азора";
 
+        String stringLowerCase = text.toLowerCase();
+        String stringUpperCase = text.toUpperCase();
+        String string = "";
+        for(int i = text.length()-1; i >=0 ; i--) {
+            string = stringUpperCase.charAt(i) + string;
+            i--;
+            string = stringLowerCase.charAt(i) + string;
+        }
+
+        System.out.println(string);
+
+
+    }
 
 }
