@@ -1,5 +1,7 @@
 package com.epam.izh.rd.online.service;
 
+import java.util.Locale;
+
 public class SimpleTextService implements TextService {
 
     /**
@@ -13,7 +15,7 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String removeString(String base, String remove) {
-        return null; //TODO
+        return base.replace(remove, ""); //TODO
     }
 
     /**
@@ -24,7 +26,7 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public boolean isQuestionString(String text) {
-        return false; //TODO
+        return text.lastIndexOf("?") == text.length() - 1 && text.length() != 0; //TODO
     }
 
     /**
@@ -35,7 +37,7 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String concatenate(String... elements) {
-        return null; //TODO
+        return String.join("", elements); //TODO
     }
 
     /**
@@ -47,8 +49,15 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String toJumpCase(String text) {
-        return null; //TODO
-    }
+        String result = "";
+        for (int i = 0; i < text.length() - 1;) {
+            result += text.substring(i, i + 1).toLowerCase();
+            result += text.substring(i + 1, i + 2).toUpperCase();
+            i += 2;
+        }
+        return result; //TODO
+
+    } //TODO
 
     /**
      * Метод определяет, является ли строка палиндромом.
@@ -59,6 +68,14 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public boolean isPalindrome(String string) {
-       return false; //TODO
+        if (string.length() > 0) {
+            string = string.toLowerCase().replaceAll("\\s+", "");
+            String invertedString = "";
+            for (int i = 0; i < string.length(); i++) {
+                invertedString = string.charAt(i) + invertedString;
+            }
+            return string.equals(invertedString);
+        }
+        return false;
     }
 }
