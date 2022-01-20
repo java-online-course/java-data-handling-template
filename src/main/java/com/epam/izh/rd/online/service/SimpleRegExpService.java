@@ -1,5 +1,13 @@
 package com.epam.izh.rd.online.service;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class SimpleRegExpService implements RegExpService {
 
     /**
@@ -11,7 +19,24 @@ public class SimpleRegExpService implements RegExpService {
      */
     @Override
     public String maskSensitiveData() {
-        return null;
+        StringBuilder result = null;
+        try {
+            File file = new File("C:/Users/Roma/IdeaProjects/java-data-handling-template/src/main/resources/sensitive_data.txt");
+            FileReader fr = new FileReader(file);
+            BufferedReader reader = new BufferedReader(fr);
+
+            result = new StringBuilder(reader.readLine());
+            Pattern pattern = Pattern.compile("(\\d{4} ){4}");
+            Matcher matcher =  pattern.matcher(result);
+
+            while (matcher.find()) {
+                result.replace(matcher.start() + 5, matcher.end() - 5, "**** **** ");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return Objects.requireNonNull(result).toString();
     }
 
     /**
@@ -22,6 +47,25 @@ public class SimpleRegExpService implements RegExpService {
      */
     @Override
     public String replacePlaceholders(double paymentAmount, double balance) {
-        return null;
+        StringBuilder result = null;
+        try  {
+            File file = new File("C:/Users/Roma/IdeaProjects/java-data-handling-template/src/main/resources/sensitive_data.txt");
+            FileReader fr = new FileReader(file);
+            BufferedReader reader = new BufferedReader(fr);
+
+            result = new StringBuilder(reader.readLine());
+            Pattern pattern = Pattern.compile("(\\$\\{)payment_amount}");
+            Matcher matcher =  pattern.matcher(result);
+            if (!matcher.find()) throw new IOException();
+            result.replace(matcher.start(), matcher.end(), Integer.toString((int) paymentAmount));
+            pattern = Pattern.compile("(\\$\\{)balance}");
+            matcher =  pattern.matcher(result);
+            if (!matcher.find()) throw new IOException();
+            result.replace(matcher.start(), matcher.end(), Integer.toString((int) balance));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return Objects.requireNonNull(result).toString();
     }
 }
