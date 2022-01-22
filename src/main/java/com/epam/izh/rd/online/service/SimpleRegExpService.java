@@ -1,5 +1,12 @@
 package com.epam.izh.rd.online.service;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class SimpleRegExpService implements RegExpService {
 
     /**
@@ -11,7 +18,32 @@ public class SimpleRegExpService implements RegExpService {
      */
     @Override
     public String maskSensitiveData() {
-        return null;
+        String location = "src/main/resources/sensitive_data.txt";
+        String string = "";
+
+        try (Scanner scanner = new Scanner(
+                new InputStreamReader(new FileInputStream(location), "UTF-8"));
+        ) {
+            while (scanner.hasNextLine()) {
+                string = scanner.nextLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Pattern patternCard = Pattern.compile("\\d{4}+\\s+\\d{4}+\\s+\\d{4}+\\s+\\d{4}");
+        Matcher matcherCard = patternCard.matcher(string);
+
+        while (matcherCard.find()) {
+            String numberCard = string.substring(matcherCard.start(), matcherCard.end());
+
+            Pattern numbersReplace = Pattern.compile("\\s+\\d{4}+\\s+\\d{4}+\\s");
+            Matcher matcherReplace = numbersReplace.matcher(numberCard);
+
+            String anonNumberCard = matcherReplace.replaceAll(" **** **** ");
+            string = string.replace(numberCard, anonNumberCard);
+        }
+        return string;
     }
 
     /**

@@ -15,7 +15,8 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String removeString(String base, String remove) {
-        return null; //TODO
+        base = base.replace(remove, "");
+        return base; //TODO
     }
 
     /**
