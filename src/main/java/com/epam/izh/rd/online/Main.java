@@ -31,27 +31,21 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        double paymentAmount = 12.0;
+        double balance = 440.0;
 
-        Pattern patternCard = Pattern.compile("\\d{4}+\\s+\\d{4}+\\s+\\d{4}+\\s+\\d{4}");
-        Matcher matcherCard = patternCard.matcher(string);
+        String paymentAmountString = String.valueOf(paymentAmount);
+        String balanceString = String.valueOf(balance);
 
-        while (matcherCard.find()) {
-            String numberCard = string.substring(matcherCard.start(), matcherCard.end());
-
-            Pattern numbersReplace = Pattern.compile("\\s+\\d{4}+\\s+\\d{4}+\\s");
-            Matcher matcherReplace = numbersReplace.matcher(numberCard);
-
-            String anonNumberCard = matcherReplace.replaceAll(" **** **** ");
-            string = string.replace(numberCard, anonNumberCard);
-        }
+        Pattern patternPayment = Pattern.compile("[$]+[{]+[a-zA-Z]+[_]+[a-zA-Z]+[}]");
+        Matcher matcherPayment = patternPayment.matcher(string);
+        string = matcherPayment.replaceAll(paymentAmountString);
 
         System.out.println(string);
-
-
-
-
-
-
+        Pattern patternBalance = Pattern.compile("[$]+[{]+[a-zA-Z]+[}]");
+        Matcher matcherBalance = patternBalance.matcher(string);
+        string = matcherBalance.replaceAll(balanceString);
+        System.out.println(string);
 
     }
 

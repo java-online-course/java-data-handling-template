@@ -54,6 +54,27 @@ public class SimpleRegExpService implements RegExpService {
      */
     @Override
     public String replacePlaceholders(double paymentAmount, double balance) {
-        return null;
+        String string = "";
+        String location = "src/main/resources/sensitive_data.txt";
+
+        try (Scanner scanner = new Scanner(
+                new InputStreamReader(new FileInputStream(location), "UTF-8"));
+        ) {
+            while (scanner.hasNextLine()) {
+                string = scanner.nextLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Pattern patternPayment = Pattern.compile("[$]+[{]+[a-zA-Z]+[_]+[a-zA-Z]+[}]");
+        Matcher matcherPayment = patternPayment.matcher(string);
+        string = matcherPayment.replaceAll( String.valueOf( (int)paymentAmount) );
+
+        Pattern patternBalance = Pattern.compile("[$]+[{]+[a-zA-Z]+[}]");
+        Matcher matcherBalance = patternBalance.matcher(string);
+        string = matcherBalance.replaceAll( String.valueOf( (int)balance) );
+
+        return string;
     }
 }
