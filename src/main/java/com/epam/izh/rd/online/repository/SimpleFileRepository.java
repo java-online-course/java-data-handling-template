@@ -1,5 +1,16 @@
 package com.epam.izh.rd.online.repository;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class SimpleFileRepository implements FileRepository {
 
     /**
@@ -32,6 +43,8 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public void copyTXTFiles(String from, String to) {
+
+
         return;
     }
 
@@ -44,7 +57,21 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public boolean createFile(String path, String name) {
-        return false;
+        try {
+            String location = File.separator + path + File.separator + name;
+            Path newFilePath = Paths.get(location) ;
+            Files.createDirectories(newFilePath.getParent());
+
+            if(Files.exists(newFilePath)) {
+                return true;
+            } else {
+                Files.createFile(newFilePath);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     /**
@@ -55,6 +82,20 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public String readFileFromResources(String fileName) {
-        return null;
+        String directory = "src/main/resources/";
+        String location = directory + fileName;
+        String string = "";
+
+        try (Scanner scanner = new Scanner(
+                new InputStreamReader(new FileInputStream(location), "UTF-8"));
+        ) {
+            while (scanner.hasNextLine()) {
+                string = scanner.nextLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return string;
     }
 }
