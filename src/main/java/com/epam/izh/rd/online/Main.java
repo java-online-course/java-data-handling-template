@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Year;
@@ -22,27 +23,37 @@ public class Main {
 
     public static void main( String args[]) {
 
-        final String path = "testDirCreateFile";
-        final String name = "newFile.txt";
+        long count = 1;
+        String directory = "";//"src//main//resources//";
+        String path = "testDirCountFiles";
 
-        try {
-            String location = File.separator + path + File.separator + name;
-            Path newFilePath = Paths.get(location) ;
-            Files.createDirectories(newFilePath.getParent());
+        long x = countDirsInDirectory( path);
+        System.out.println(x);
 
-            if(!Files.exists(newFilePath)) {
-                Files.createFile(newFilePath);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("false");
-            //return false;
+    }
+
+    public static long countDirsInDirectory(String source) {
+        while ( source.equals("testDirCountFiles")) {
+            String directory = "src//main//resources//";
+            source = directory + source;
         }
-        //return true;
-        System.out.println("true");
+        long count = 0;
+        File file = new File( source);
+        File[] s = file.listFiles();
+        if (s != null || s.length > 0) {
+            for (int j = 0; j < s.length; j++) {
+                if (!s[j].isDirectory()) {
+                    count++;
+                } else {
+                    count += countDirsInDirectory(s[j].getPath());
+                }
+            }
+        }
+        return count;
 
-
-
+        /// триалспорт + адидас//на пушкинской
+        // скетчерсы
+        //тариф 720 вместе +
     }
 
 }
