@@ -75,7 +75,7 @@ public class FileRepositoryTest {
   @DisplayName("Тест метода FileRepository.createFile(String path)")
   void testCreateFile() {
     fileRepository.createFile(TEST_DIR_CREATE_PATH, TEST_FILE_TO_CREATE);
-
+  System.out.println("1213");
     assertTrue(getFile(TEST_DIR_CREATE_PATH + "/" + TEST_FILE_TO_CREATE).exists());
   }
 
@@ -100,9 +100,14 @@ public class FileRepositoryTest {
   private File getFile(String path) {
     ClassLoader classLoader = getClass().getClassLoader();
     URL resource = classLoader.getResource(path);
+//    System.out.println(path);
+    System.out.println(resource);
     if (resource != null) {
+      System.out.println("1231");
       return new File(resource.getFile());
+
     }
+    System.out.println("1111111");
     return new File("");
   }
 }

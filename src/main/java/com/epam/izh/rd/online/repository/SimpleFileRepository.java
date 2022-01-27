@@ -90,6 +90,9 @@ public class SimpleFileRepository implements FileRepository {
         return;
     }
 
+
+
+//////////////////////////////////////////////////////////////////
     /**
      * Метод создает файл на диске с расширением txt
      *
@@ -99,61 +102,40 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public boolean createFile(String path, String name) {
-        String location = File.separator + path + File.separator + name;
+        String location = "C:/" + path + File.separator + name;
+        //System.out.println(location);
         Path newFilePath = Paths.get(location);
         try {
             Files.createDirectories(newFilePath.getParent());
-
             if (Files.exists(newFilePath)) {
                 return true;
             } else {
                 Files.createFile(newFilePath);
+          //      System.out.println(newFilePath);
             }
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("Exception");
+
         }
         return true;
         // Проблема с тестом диретория и файл создается (попробовать на другом ПК)
     }
 
-        /*
-        Not discarding all possible solutions here, this error also occurs
-        * when your running Android Studio on Windows environment and using
-        * a project directory on an external hard drive formatted with other than NFTS. ]
-        If this is the case, simply move your project into the main HDD (NTFS) and
-        * reload the project again , this time from the main HDD folder path.
-        * */
 
-        /*
-        try {
-            String fileFromResource = getFileFromResource("");
-            Path path1 = Paths.get(fileFromResource + File.separator + path + File.separator + name);
-            Files.createDirectories(path1.getParent());
-            if (Files.exists(path1)) {
-                return true;
-            } else {
-                Files.createFile(path1);
-            }
-        } catch (IOException e) {
-            return false;
-        }
-        return true;
-
-    }
-       *//*
-    private String getFileFromResource(String fileName) {
-
+    private File getFile(String path) {
         ClassLoader classLoader = getClass().getClassLoader();
-        URL resource = classLoader.getResource(fileName);
-
-        try {
-            return new File(resource.toURI()).getAbsolutePath();
-        } catch (Exception e) {
-            return null;
+        URL resource = classLoader.getResource(path);
+        if (resource != null) {
+            return new File(resource.getFile());
         }
+        return new File("");
     }
 
-    */
+
+
+
+
 
 
 
@@ -169,12 +151,13 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public String readFileFromResources(String fileName) {
+
         String directory = "src/main/resources/";
         String location = directory + fileName;
         String string = "";
 
         try (Scanner scanner = new Scanner(
-                new InputStreamReader(new FileInputStream(location), "UTF-8"));
+                new InputStreamReader(new FileInputStream(location) /*,"UTF-8"*/));
         ) {
             while (scanner.hasNextLine()) {
                 string = scanner.nextLine();
@@ -182,6 +165,8 @@ public class SimpleFileRepository implements FileRepository {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        //System.out.println(string);
+        //System.out.println(string.equals("Ya-hoo!") );
 
         return string;
     }
