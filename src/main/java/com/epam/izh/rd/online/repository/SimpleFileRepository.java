@@ -102,24 +102,33 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public boolean createFile(String path, String name) {
-        String location = "C:/" + path + File.separator + name;
-        //System.out.println(location);
-        Path newFilePath = Paths.get(location);
+
         try {
-            Files.createDirectories(newFilePath.getParent());
-            if (Files.exists(newFilePath)) {
+            String fileFromResource = getFileFromResource("");
+            Path path1 = Paths.get(fileFromResource + File.separator + path + File.separator + name);
+            Files.createDirectories(path1.getParent());
+            if (Files.exists(path1)) {
                 return true;
             } else {
-                Files.createFile(newFilePath);
-          //      System.out.println(newFilePath);
+                Files.createFile(path1);
             }
         } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Exception");
-
+            return false;
         }
         return true;
-        // Проблема с тестом диретория и файл создается (попробовать на другом ПК)
+
+    }
+
+    private String getFileFromResource(String fileName) {
+
+        ClassLoader classLoader = getClass().getClassLoader();
+        URL resource = classLoader.getResource(fileName);
+
+        try {
+            return new File(resource.toURI()).getAbsolutePath();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 
@@ -157,7 +166,7 @@ public class SimpleFileRepository implements FileRepository {
         String string = "";
 
         try (Scanner scanner = new Scanner(
-                new InputStreamReader(new FileInputStream(location) /*,"UTF-8"*/));
+                new InputStreamReader(new FileInputStream(location) /*,"UTF-8"*/))//;
         ) {
             while (scanner.hasNextLine()) {
                 string = scanner.nextLine();

@@ -5,6 +5,7 @@ import com.epam.izh.rd.online.repository.SimpleFileRepository;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeAll;
@@ -100,14 +101,10 @@ public class FileRepositoryTest {
   private File getFile(String path) {
     ClassLoader classLoader = getClass().getClassLoader();
     URL resource = classLoader.getResource(path);
-//    System.out.println(path);
-    System.out.println(resource);
     if (resource != null) {
-      System.out.println("1231");
       return new File(resource.getFile());
 
     }
-    System.out.println("1111111");
     return new File("");
   }
 }
