@@ -1,5 +1,9 @@
 package com.epam.izh.rd.online.repository;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.*;
+
 public class SimpleFileRepository implements FileRepository {
 
     /**
@@ -10,7 +14,16 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public long countFilesInDirectory(String path) {
-        return 0;
+        long count = 0;
+        try {
+            Files.walk(Paths.get(path))
+                    .filter(Files::isRegularFile)
+                    .count();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return 0;
+        }
+        return count;
     }
 
     /**
@@ -21,7 +34,16 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public long countDirsInDirectory(String path) {
-        return 0;
+        long count = 0;
+        try {
+            Files.walk(Paths.get(path))
+                    .filter(p -> p.toFile().isDirectory())
+                    .count();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+        return count;
     }
 
     /**
@@ -32,7 +54,22 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public void copyTXTFiles(String from, String to) {
-        return;
+        Path fromPath = Paths.get(from).normalize();
+        Path toPath = Paths.get(to).normalize();
+        if (toPath.getParent() != null) {
+            if (fromPath.endsWith(".txt") && (Files.notExists(toPath.getParent()))) {
+                try {
+                    Files.createDirectories(toPath.getParent());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    Files.copy(fromPath, toPath);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     /**
@@ -44,8 +81,46 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public boolean createFile(String path, String name) {
-        return false;
+        boolean isCreateDir = false;
+        boolean isCreateFile = false;
+        Path dirPath = Paths.get(System.getProperty("user.dir") + File.separator + path).normalize();
+        Path filePath = Paths.get(dirPath + File.separator + name).normalize();
+
+        if (Files.notExists(dirPath)) {
+            try {
+                Files.createDirectories(dirPath);
+                isCreateDir = Files.exists(dirPath);
+            } catch (IOException e) {
+                isCreateDir = Files.exists(dirPath);
+                e.printStackTrace();
+            }
+            if (Files.notExists(filePath)) {
+                try {
+                    Files.createFile(filePath);
+                    isCreateFile = Files.exists(filePath);
+                } catch (IOException e) {
+                    isCreateFile = Files.exists(filePath);
+                    e.printStackTrace();
+                }
+            }
+
+        } else if (Files.exists(dirPath) && Files.notExists(filePath)) {
+            isCreateDir = Files.exists(dirPath);
+            try {
+                Files.createFile(filePath);
+                isCreateFile = Files.exists(filePath);
+            } catch (IOException e) {
+                isCreateFile = Files.exists(filePath);
+                e.printStackTrace();
+            }
+
+        } else {
+            isCreateDir = Files.exists(dirPath);
+            isCreateFile = Files.exists(filePath);
+        }
+        return (isCreateDir && isCreateFile);
     }
+
 
     /**
      * Метод считывает тело файла .txt из папки src/main/resources
@@ -55,6 +130,13 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public String readFileFromResources(String fileName) {
-        return null;
+        Path path = Paths.get("src/main/resources" + File.separator + fileName);
+        String read = "";
+        try {
+            read = Files.readAllLines(path).get(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return read;
     }
 }
