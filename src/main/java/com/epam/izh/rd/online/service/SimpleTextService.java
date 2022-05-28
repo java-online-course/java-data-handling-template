@@ -1,5 +1,7 @@
 package com.epam.izh.rd.online.service;
 
+import java.util.Arrays;
+
 public class SimpleTextService implements TextService {
 
     /**
@@ -12,8 +14,9 @@ public class SimpleTextService implements TextService {
      * @param remove - строка которую необходимо удалить
      */
     @Override
-    public String removeString(String base, String remove) {
-        return null; //TODO
+    public String removeString(String base, String remove)
+    {
+        return base.replaceAll(remove, "");
     }
 
     /**
@@ -23,8 +26,9 @@ public class SimpleTextService implements TextService {
      * Например для строки "Hello, hello, hello!" метод вернет false
      */
     @Override
-    public boolean isQuestionString(String text) {
-        return false; //TODO
+    public boolean isQuestionString(String text)
+    {
+        return text.endsWith("?");
     }
 
     /**
@@ -34,8 +38,14 @@ public class SimpleTextService implements TextService {
      * метод вернет "Smells Like Teen Spirit"
      */
     @Override
-    public String concatenate(String... elements) {
-        return null; //TODO
+    public String concatenate(String... elements)
+    {
+        StringBuilder result = new StringBuilder();
+        for (String s: elements)
+            {
+                 result.append(s);
+            }
+        return result.toString();
     }
 
     /**
@@ -47,7 +57,12 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String toJumpCase(String text) {
-        return null; //TODO
+        char[] result = text.toCharArray();
+        for (int i = 0; i < result.length-1; i += 2) {
+            result[i] = Character.toLowerCase(result[i]);
+            result[i+1] = Character.toUpperCase(result[i+1]);
+        }
+        return String.valueOf(result);
     }
 
     /**
@@ -59,6 +74,10 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public boolean isPalindrome(String string) {
-       return false; //TODO
+        StringBuilder stringBuilder = new StringBuilder(string.replaceAll("\\s", ""));
+        if (string.length() > 1)
+        {
+            return (stringBuilder.toString().equalsIgnoreCase(stringBuilder.reverse().toString()));
+        }else return false;
     }
 }

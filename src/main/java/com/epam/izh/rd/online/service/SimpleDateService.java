@@ -2,7 +2,9 @@ package com.epam.izh.rd.online.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.time.format.DateTimeFormatter;
+import java.util.concurrent.TimeUnit;
 
 public class SimpleDateService implements DateService {
 
@@ -14,7 +16,8 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public String parseDate(LocalDate localDate) {
-        return null;
+        DateTimeFormatter formatters = DateTimeFormatter.ofPattern("dd-MM-uuuu");
+        return localDate.format(formatters);
     }
 
     /**
@@ -25,7 +28,8 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public LocalDateTime parseString(String string) {
-        return null;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        return LocalDateTime.parse(string, formatter);
     }
 
     /**
@@ -37,7 +41,7 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public String convertToCustomFormat(LocalDate localDate, DateTimeFormatter formatter) {
-        return null;
+        return localDate.format(formatter);
     }
 
     /**
@@ -47,7 +51,10 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public long getNextLeapYear() {
-        return 0;
+        LocalDate now = LocalDate.now();
+        long year = now.getYear();
+        while (!Year.isLeap(++year));
+        return year;
     }
 
     /**
@@ -56,9 +63,8 @@ public class SimpleDateService implements DateService {
      * @return число секунд
      */
     @Override
-    public long getSecondsInYear(int year) {
-        return 0;
+    public long getSecondsInYear(int year)
+    {
+        return TimeUnit.DAYS.toSeconds( Year.of(year).length() );
     }
-
-
 }
