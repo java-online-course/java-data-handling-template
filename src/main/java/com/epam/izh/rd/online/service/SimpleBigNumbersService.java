@@ -22,7 +22,6 @@ public class SimpleBigNumbersService implements BigNumbersService {
         for (int i = 2; i < (Math.sqrt(number)+2); i++) {
             if (number % i == 0) {
                 return false;
-                //break;
             }
         }
         return true;
